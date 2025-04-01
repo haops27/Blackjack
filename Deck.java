@@ -2,49 +2,48 @@ package black_jack;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Deck {
+class Card{
+	// Name of each cards in folder "cards"
+	String value; // Số
+	String type;  // Chất
 	
-	//Creating cards
-	private class Card{
-		// Name of each cards in folder "cards"
-		String value; 
-		String type;
-		
-		Card(String value, String type){
-			this.value = value;
-			this.type = type;
-		}
-		
-		public String toString() {
-			return value + " - " + type;
-		}
-		
-		//get value of each cards: 2-10 are equal to themselves; J, Q, K are considered as 10; Ace is 1 or 11 for some case
-		public int getValue() {
-			if("AJQK".contains(value)) {
-				if(value == "A") {
-					return 11;
-				}
-				return 10;
-			}
-			return Integer.parseInt(value);
-		}
-		
-		//check that a cards is an Ace or not
-		public boolean isAce() {
-			return value == "A";
-		}
-		
-		// getting image of each cards
-		public String getImagePath() {
-			return "./cards/" + toString() + ".png";
-		}
+	Card(String value, String type){
+		this.value = value;
+		this.type = type;
 	}
 	
-	//Building deck
+	public String toString() {
+		return value + " - " + type;
+	}
+	
+	//get value of each cards: 2-10 are equal to themselves; J, Q, K are considered as 10; Ace is 1 or 11 for some case
+	public int getValue() {
+		if("AJQK".contains(value)) {
+			return isAce() ? 11 : 10;
+		}
+		return Integer.parseInt(value);
+	}
+	
+	//check that a cards is an Ace or not
+	public boolean isAce() {
+		return value.equals("A");
+	}
+	
+	// getting image of each cards
+	public String getImagePath() {
+		return "./cards/" + toString() + ".png";
+	}
+}
+
+public class Deck {
 	ArrayList<Card> deck;
 	
-	public void buildDeck() {
+	//Building deck
+	public Deck() {
+        buildDeck();
+    }
+	
+	private void buildDeck() {
 		deck = new ArrayList<Card>(); // new deck variable to store all of the cards
 		String[] values = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
         String[] types = {"C", "D", "H", "S"};
@@ -75,6 +74,6 @@ public class Deck {
 		
 		//Test if the code run ok
 		System.out.println("AFTER SHUFFLE");
-        System.out.println(deck);
+        	System.out.println(deck);
 	}
 }
