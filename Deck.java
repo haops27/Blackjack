@@ -2,7 +2,7 @@ package black_jack;
 import java.util.ArrayList;
 import java.util.Random;
 
-class Card{
+class Card {
 	// Name of each cards in folder "cards"
 	String value; // Số
 	String type;  // Chất
@@ -36,41 +36,41 @@ class Card{
 }
 
 public class Deck {
-	ArrayList<Card> deck;
+	private ArrayList<Card> deck;
 	
 	//Building deck
 	public Deck() {
-        buildDeck();
-    }
+		buildDeck();
+	}
 	
 	private void buildDeck() {
 		deck = new ArrayList<Card>(); // new deck variable to store all of the cards
 		String[] values = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
-        String[] types = {"C", "D", "H", "S"};
+        	String[] types = {"C", "D", "H", "S"};
         
-        // adding each cards into deck
-        for (int i = 0; i < types.length; i++) {
-            for (int j = 0; j < values.length; j++) {
-                Card card = new Card(values[j], types[i]);
-                deck.add(card);
-            }
-        }
-        
-        //Test if the code run ok
-        System.out.println("BUILD DECK:");
-        System.out.println(deck);
+        	// adding each cards into deck
+	        for (int i = 0; i < types.length; i++) {
+	            for (int j = 0; j < values.length; j++) {
+	                Card card = new Card(values[j], types[i]);
+	                deck.add(card);
+	            }
+	        }
+	        
+	        //Test if the code run ok
+	        System.out.println("BUILD DECK:");
+	        System.out.println(deck);
 	}
 	
 	//Shuffle deck
 	public void shuffleDeck() {
 		Random random = new Random();
 		for (int i = 0; i < deck.size(); i++) {
-            int j = random.nextInt(deck.size());
-            Card currCard = deck.get(i);
-            Card randomCard = deck.get(j);
-            deck.set(i, randomCard);
-            deck.set(j, currCard);
-        }
+		        int j = random.nextInt(deck.size());
+			Card currCard = deck.get(i);
+			Card randomCard = deck.get(j);
+			deck.set(i, randomCard);
+			deck.set(j, currCard);
+        	}
 		
 		//Test if the code run ok
 		System.out.println("AFTER SHUFFLE");
