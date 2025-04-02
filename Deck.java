@@ -4,8 +4,8 @@ import java.util.Random;
 
 class Card {
 	// Name of each cards in folder "cards"
-	String value; // Số
-	String type;  // Chất
+	private String value; // Số
+	private String type;  // Chất
 	
 	Card(String value, String type){
 		this.value = value;
