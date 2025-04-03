@@ -18,9 +18,10 @@ class Card {
 	
 	//get value of each cards: 2-10 are equal to themselves; J, Q, K are considered as 10; Ace is 1 or 11 for some case
 	public int getValue() {
-		if("AJQK".contains(value)) {
-			return isAce() ? 11 : 10;
+		if ("JQK".contains(value)) {
+			return 10;
 		}
+		if (this.isAce()) return 11;
 		return Integer.parseInt(value);
 	}
 	
@@ -64,8 +65,8 @@ public class Deck {
 	//Shuffle deck
 	public void shuffleDeck() {
 		Random random = new Random();
-		for (int i = 0; i < deck.size(); i++) {
-		        int j = random.nextInt(deck.size());
+		for (int i = deck.size()-1; i >= 0; i--) {
+		        int j = random.nextInt(i+1);
 			Card currCard = deck.get(i);
 			Card randomCard = deck.get(j);
 			deck.set(i, randomCard);
