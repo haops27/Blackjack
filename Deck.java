@@ -21,7 +21,9 @@ class Card {
 		if ("JQK".contains(value)) {
 			return 10;
 		}
-		if (this.isAce()) return 11;
+		if (this.isAce()) {
+			return 11;
+		}
 		return Integer.parseInt(value);
 	}
 	
@@ -65,7 +67,7 @@ public class Deck {
 	//Shuffle deck
 	public void shuffleDeck() {
 		Random random = new Random();
-		for (int i = deck.size()-1; i >= 0; i--) {
+		for (int i = deck.size()-1; i > 0; i--) {
 		        int j = random.nextInt(i+1);
 			Card currCard = deck.get(i);
 			Card randomCard = deck.get(j);
