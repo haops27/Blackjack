@@ -41,9 +41,10 @@ class Card {
 public class Deck {
 	private ArrayList<Card> deck;
 	
-	//Building deck
+	//Building and shuffling deck
 	public Deck() {
-		buildDeck();
+		this.buildDeck();
+		this.shuffleDeck();
 	}
 	
 	private void buildDeck() {
@@ -76,7 +77,7 @@ public class Deck {
         	}
 		
 		//Test if the code run ok
-		System.out.println("AFTER SHUFFLE");
+		System.out.println("AFTER SHUFFLE: ");
         	System.out.println(deck);
 	}
 }
