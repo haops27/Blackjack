@@ -41,11 +41,6 @@ public class Player {
         return sum;
     }
 
-    // Trả về các lá bài của người chơi
-    public ArrayList<Card> getHand() {
-        return hand;
-    }
-
     // Thiết lập số tiền cược
     public void setBet(int bet) {
         this.bet = bet;
