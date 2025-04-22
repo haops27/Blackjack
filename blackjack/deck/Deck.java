@@ -25,8 +25,8 @@ public class Deck {
 	        }
 	        
 	        //Test if the code run ok
-	        System.out.println("BUILD DECK:");
-	        System.out.println(deck);
+	        //System.out.println("BUILD DECK:");
+	        //System.out.println(deck);
 	}
 	
 	//Shuffle deck
@@ -41,7 +41,11 @@ public class Deck {
         	}
 		
 		//Test if the code run ok
-		System.out.println("AFTER SHUFFLE: ");
-        	System.out.println(deck);
+		//System.out.println("AFTER SHUFFLE: ");
+        	//System.out.println(deck);
+	}
+
+	public Card getCard() {
+		return deck.removeLast();
 	}
 }
