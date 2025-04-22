@@ -40,11 +40,6 @@ public class Dealer {
         return sum;
     }
 
-    // Trả về các lá bài của nhà cái
-    public ArrayList<Card> getHand() {
-        return hand;
-    }
-
     // Kiểm tra nếu nhà cái đã "bust" (quá 21 điểm)
     public boolean isBust() {
         return sum > 21;
@@ -54,8 +49,7 @@ public class Dealer {
     public void playTurn(Deck deck) {
         // Nhà cái rút bài cho đến khi có ít nhất 17 điểm
         while (sum < 17) {
-            Card card = deck.getDeck().remove(deck.getDeck().size() - 1);  // Lấy lá bài cuối cùng từ bộ bài
-            addCard(card);
+            addCard(deck.getCard());	// Lấy lá bài cuối cùng từ bộ bài
         }
     }
 
