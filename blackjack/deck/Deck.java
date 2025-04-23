@@ -1,9 +1,8 @@
 package blackjack.deck;
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
 
 public class Deck {
-	private ArrayList<Card> deck;
+	private List<Card> deck;
 	
 	//Building and shuffling deck
 	public Deck() {
@@ -14,19 +13,18 @@ public class Deck {
 	private void buildDeck() {
 		deck = new ArrayList<Card>(); // new deck variable to store all of the cards
 		String[] values = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
-        	String[] types = {"C", "D", "H", "S"};
+        String[] types = {"C", "D", "H", "S"};
         
-        	// adding each cards into deck
-	        for (int i = 0; i < types.length; i++) {
-	            for (int j = 0; j < values.length; j++) {
-	                Card card = new Card(values[j], types[i]);
-	                deck.add(card);
-	            }
-	        }
-	        
-	        //Test if the code run ok
-	        //System.out.println("BUILD DECK:");
-	        //System.out.println(deck);
+        // adding each cards into deck
+	    for (int i = 0; i < types.length; i++) {
+	    	for (int j = 0; j < values.length; j++) {
+	    		Card card = new Card(values[j], types[i]);
+	    		deck.add(card);
+	    	}
+	    }
+	    
+	    System.out.print("DECK BUILT: ");
+	    System.out.println(deck);
 	}
 	
 	//Shuffle deck
@@ -38,14 +36,14 @@ public class Deck {
 			Card randomCard = deck.get(j);
 			deck.set(i, randomCard);
 			deck.set(j, currCard);
-        	}
+        }
 		
-		//Test if the code run ok
-		//System.out.println("AFTER SHUFFLE: ");
-        	//System.out.println(deck);
+		System.out.print("DECK SHUFFLED: ");
+	    System.out.println(deck);
 	}
 
 	public Card getCard() {
 		return deck.removeLast();
 	}
+	
 }
