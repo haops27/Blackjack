@@ -36,7 +36,6 @@ public class Card {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) return false;
 		if (obj instanceof Card) {
 			Card o = (Card) obj;
 			return o.getValue() == this.getValue() && o.getType().equals(this.type);
