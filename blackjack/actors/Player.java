@@ -1,45 +1,13 @@
 package blackjack.actors;
 
-import java.util.ArrayList;
+import blackjack.deck.*;
 
-import blackjack.deck.Card;
-
-public class Player {
-    private ArrayList<Card> hand;      // Danh sách các lá bài của người chơi
-    private int sum;                   // Tổng điểm của người chơi
-    private int aceCount;              // Số lượng Ace trong tay người chơi
-    private int bet;                   // Số tiền cược của người chơi
-    private double tokens;
+public class Player extends Actor {
+    private int bet;  // Số tiền cược của người chơi
 
     // Constructor
     public Player() {
-        this.hand = new ArrayList<>();
-        this.sum = 0;
-        this.aceCount = 0;
-        this.bet = 0;
-    }
-
-    // Thêm một lá bài vào tay người chơi
-    public void addCard(Card card) {
-        hand.add(card);
-        sum += card.getValue();
-        if (card.isAce()) {
-            aceCount++;
-        }
-        adjustForAce();  // Điều chỉnh giá trị Ace nếu cần
-    }
-
-    // Điều chỉnh giá trị của Ace (A) nếu tổng điểm vượt quá 21
-    private void adjustForAce() {
-        while (sum > 21 && aceCount > 0) {
-            sum -= 10;  // Chuyển Ace từ 11 xuống 1
-            aceCount--;
-        }
-    }
-
-    // Trả về tổng điểm của người chơi
-    public int getSum() {
-        return sum;
+        super();
     }
 
     // Thiết lập số tiền cược
@@ -52,19 +20,13 @@ public class Player {
         return bet;
     }
 
-    // Kiểm tra nếu người chơi đã "bust" (quá 21 điểm)
-    public boolean isBust() {
-        return sum > 21;
-    }
-
-    // Reset tay bài của người chơi (sau mỗi ván mới)
-    public void reset() {
-        hand.clear();
-        sum = 0;
-        aceCount = 0;
-    }
-
-    public boolean blackjack() {
-        
+    // Cài đặt hành vi cho người chơi: người chơi có thể "Hit" hoặc "Stay"
+    @Override
+    public void takeTurn(Deck deck) {
+        // Người chơi sẽ tự quyết định hành vi của mình, ví dụ: chỉ đơn giản rút bài
+        // Thực hiện hành động "Hit" cho đến khi quyết định "Stay"
+        // Đây là ví dụ, bạn có thể thêm logic để người chơi quyết định
+        Card card = deck.getCard();  // Lấy lá bài cuối cùng
+        addCard(card);
     }
 }

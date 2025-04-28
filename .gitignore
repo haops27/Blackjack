@@ -3,3 +3,4 @@
 blackjack/test/
 *.class
 .settings/
+.bin/
