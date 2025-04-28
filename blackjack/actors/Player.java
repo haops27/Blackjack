@@ -9,6 +9,7 @@ public class Player {
     private int sum;                   // Tổng điểm của người chơi
     private int aceCount;              // Số lượng Ace trong tay người chơi
     private int bet;                   // Số tiền cược của người chơi
+    private double tokens;
 
     // Constructor
     public Player() {
@@ -61,5 +62,9 @@ public class Player {
         hand.clear();
         sum = 0;
         aceCount = 0;
+    }
+
+    public boolean blackjack() {
+        
     }
 }
