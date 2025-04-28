@@ -25,11 +25,25 @@ public class Card {
 		return Integer.parseInt(value);
 	}
 	
+	public String getType() {
+		return type;
+	}
+	
 	//check that a cards is an Ace or not
 	public boolean isAce() {
 		return value.equals("A");
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) return false;
+		if (obj instanceof Card) {
+			Card o = (Card) obj;
+			return o.getValue() == this.getValue() && o.getType().equals(this.type);
+		}
+		return false;
+	}
+
 	// getting image of each cards
 	public String getImagePath() {
 		return "./cards/" + toString() + ".png";
