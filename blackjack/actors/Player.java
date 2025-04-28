@@ -21,7 +21,7 @@ public class Player extends Actor {
 	}
 
 	// Thiết lập số tiền cược
-    public void setBet(int bet) {
+    public void setBet(float bet) {
         this.bet = bet;
     }
 
