@@ -2,43 +2,45 @@ package blackjack.deck;
 
 public class Card {
 	// Name of each cards in folder "cards"
-	private String value; // Số
-	private String type;  // Chất
+	private final Rank value; // Số
+	private final Suit type;  // Chất
 	
-	Card(String value, String type){
+	Card(Rank value, Suit type){
 		this.value = value;
 		this.type = type;
 	}
 	
+    @Override
 	public String toString() {
 		return value + " - " + type;
 	}
 	
 	//get value of each cards: 2-10 are equal to themselves; J, Q, K are considered as 10; Ace is 1 or 11 for some case
 	public int getValue() {
-		if ("JQK".contains(value)) {
-			return 10;
-		}
-		if (this.isAce()) {
-			return 11;
-		}
-		return Integer.parseInt(value);
+		return value.getBlackjackValue();
 	}
 	
-	public String getType() {
+	public Rank getRank() {
+		return value;
+	}
+	
+	public Suit getSuit() {
 		return type;
+	}
+	
+	public String getColor() {
+		return type.getColor();
 	}
 	
 	//check that a cards is an Ace or not
 	public boolean isAce() {
-		return value.equals("A");
+		return value == Rank.A;
 	}
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof Card) {
-			Card o = (Card) obj;
-			return o.getValue() == this.getValue() && o.getType().equals(this.type);
+		if (obj instanceof Card o) {
+			return o.getRank() == this.value && o.getSuit() == this.type;
 		}
 		return false;
 	}

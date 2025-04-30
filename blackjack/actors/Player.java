@@ -4,12 +4,14 @@ import blackjack.deck.*;
 
 public class Player extends Actor {
     private float bet;  // Số tiền cược của người chơi
-    private float tokens;
+    private float sidebets; // Số tiền cược phụ của người chơi
+    private float tokens = 2500f; // Tổng số tiền người chơi đang có, bao gồm cả tiền cược
+    private String name; // Tên của người chơi
 
     // Constructor
-    public Player() {
+    public Player(String name) {
         super();
-        tokens = 5000;
+        this.name = name;
     }
 
     public float getTokens() {
@@ -29,12 +31,24 @@ public class Player extends Actor {
     public float getBet() {
         return bet;
     }
+
+    public float getSidebets() {
+        return sidebets;
+    }
+
+    public void setSidebets(float sidebets) {
+        this.sidebets = sidebets;
+    }
     
     public boolean hasBlackjack() {
     	return hand.size() == 2 && sum == 21;
     }
 
-    // Cài đặt hành vi cho người chơi: người chơi có thể "Hit" hoặc "Stay"
+    public String getName() {
+		return name;
+	}
+
+	// Cài đặt hành vi cho người chơi: người chơi có thể "Hit" hoặc "Stay"
     @Override
     public void takeTurn(Deck deck) {
         // Người chơi sẽ tự quyết định hành vi của mình, ví dụ: chỉ đơn giản rút bài
@@ -43,4 +57,18 @@ public class Player extends Actor {
         Card card = deck.getCard();  // Lấy lá bài cuối cùng
         addCard(card);
     }
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Player o) {
+			return o.getName().equals(name);
+		}
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return name.hashCode();
+	}
+
 }
