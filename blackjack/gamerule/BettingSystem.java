@@ -74,7 +74,7 @@ public class BettingSystem {
 		Card c1 = cards.get(0);
 		Card c2 = cards.get(1);
 		if (c1.equals(c2)) multiplier = 25f;
-		if (c1.getRank() == c2.getRank()) {
+		else if (c1.getRank() == c2.getRank()) {
 			if (c1.getColor().equals(c2.getColor())) multiplier = 12f;
 			else multiplier = 6f;
 		}

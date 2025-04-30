@@ -5,7 +5,7 @@ public class Card {
 	private final Rank value; // Số
 	private final Suit type;  // Chất
 	
-	Card(Rank value, Suit type){
+	public Card(Rank value, Suit type){
 		this.value = value;
 		this.type = type;
 	}
