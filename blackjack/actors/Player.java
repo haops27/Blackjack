@@ -6,12 +6,18 @@ public class Player extends Actor {
     private float bet;  // Số tiền cược của người chơi
     private float sidebets; // Số tiền cược phụ của người chơi
     private float tokens = 2500f; // Tổng số tiền người chơi đang có, bao gồm cả tiền cược
-    private String name; // Tên của người chơi
+    private final String name; // Tên của người chơi
 
     // Constructor
     public Player(String name) {
         super();
         this.name = name;
+    }
+
+    public Player(String name, float tokens) {
+        super();
+        this.name = name;
+        this.tokens = tokens;
     }
 
     public float getTokens() {
@@ -56,6 +62,18 @@ public class Player extends Actor {
         // Đây là ví dụ, bạn có thể thêm logic để người chơi quyết định
         Card card = deck.getCard();  // Lấy lá bài cuối cùng
         addCard(card);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Player ");
+        sb.append(name);
+        sb.append(": ");
+        sb.append(hand);
+        sb.append(", sum: ");
+        sb.append(getSum());
+        return sb.toString();
     }
 
 	@Override

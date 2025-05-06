@@ -50,11 +50,10 @@ public class BettingSystem {
 	}
 	
 	public void calculateSidebetPayout(Player player, Card dealerFirstCard) {
-		float multiplier = 0;
-		switch (sb.get(player)) {
-		case PERFECT_PAIR -> multiplier = evalPerfectPair(player.getHand());
-		case TWENTYONE_PLUS_THREE -> multiplier = eval21Plus3(player.getHand(), dealerFirstCard);
-		}
+		float multiplier = switch (sb.get(player)) {
+			case PERFECT_PAIR -> evalPerfectPair(player.getHand());
+			case TWENTYONE_PLUS_THREE -> eval21Plus3(player.getHand(), dealerFirstCard);
+		};
 		
 		float payout;
 		
