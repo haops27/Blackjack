@@ -3,8 +3,8 @@ import java.util.*;
 
 public class Deck {
 	private List<Card> deck;
-	private final Rank[] ranks = {Rank.A, Rank.TWO, Rank.THREE, Rank.FOUR, Rank.FIVE, Rank.SIX, Rank.SEVEN, Rank.EIGHT, Rank.NINE, Rank.TEN, Rank.J, Rank.Q, Rank.K};
-    private final Suit[] suits = {Suit.C, Suit.D, Suit.H, Suit.S};
+	private static final Rank[] ranks = {Rank.A, Rank.TWO, Rank.THREE, Rank.FOUR, Rank.FIVE, Rank.SIX, Rank.SEVEN, Rank.EIGHT, Rank.NINE, Rank.TEN, Rank.J, Rank.Q, Rank.K};
+    private static final Suit[] suits = {Suit.C, Suit.D, Suit.H, Suit.S};
 	
 	//Building and shuffling deck
 	public Deck() {
