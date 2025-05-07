@@ -12,6 +12,14 @@ public class Player extends Actor {
     private int splitSum = 0;
     private int splitAceCount = 0;
     
+    
+    // Constructor
+    public Player(String name) {
+        super();
+        this.name = name;
+    }
+    
+    
     //Split function
     public boolean canSplit() {
         return hand.size() == 2 && hand.get(0).getRank() == hand.get(1).getRank() && tokens >= bet;
@@ -29,16 +37,14 @@ public class Player extends Actor {
             addCardToSplitHand(deck.getCard()); // Add to split hand
 
             System.out.println("Player has split the hand.");
+            System.out.println("First hand: " + this.getHand() + " (sum: " + this.getSum() + ")");
+            System.out.println("Second hand: " + this.getSplitHand() + " (sum: " + this.getSplitSum() + ")");
             return true;
         }
         System.out.println("Split not allowed.");
         return false;
     }
 
-    public int getSplitSum() {
-        return splitSum;
-    }
-    
     public void addCardToSplitHand(Card card) {
         splitHand.add(card);
         splitSum += card.getValue();
@@ -52,12 +58,31 @@ public class Player extends Actor {
     public ArrayList<Card> getSplitHand() {
         return splitHand;
     }
+    
+    public int getSplitSum() {
+        return splitSum;
+    }
+    
+    public boolean isSplitBust(){
+        return splitSum > 21;
+    }
+    
+    
+  //Double Down functionality
+    public boolean canDouble() {
+        return hand.size() == 2 && tokens >= bet;
+    }
 
-
-    // Constructor
-    public Player(String name) {
-        super();
-        this.name = name;
+    public boolean doubleDown(Deck deck) {
+        if (!canDouble()) {
+            System.out.println("You cannot double down!");
+            return false;
+        }
+        bet *= 2;
+        addCard(deck.getCard());
+        System.out.println("Doubled down successfully!");
+        System.out.println("Doubled: " + this.getHand() + " (sum: " + this.getSum() + ")");
+        return true;
     }
 
     public float getTokens() {
@@ -94,22 +119,6 @@ public class Player extends Actor {
 		return name;
 	}
     
-    
-    //Double Down fucntionality
-    public boolean canDouble() {
-        return hand.size() == 2 && tokens >= bet;
-    }
-
-    public boolean doubleDown(Deck deck) {
-        if (!canDouble()) {
-            System.out.println("You cannot double down!");
-            return false;
-        }
-        bet *= 2;
-        addCard(deck.getCard());
-        System.out.println("Doubled down successfully!");
-        return true;
-    }
 
 	// Cài đặt hành vi cho người chơi: người chơi có thể "Hit" hoặc "Stay"
     @Override
@@ -140,9 +149,19 @@ public class Player extends Actor {
 		this.bet = 0;
 		this.sidebets = 0;
 	}
+	
 
-    public boolean isSplitBust(){
-        return splitSum > 21;
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Player ");
+        sb.append(name);
+        sb.append(": ");
+        sb.append(hand);
+        sb.append(", sum: ");
+        sb.append(getSum());
+        return sb.toString();
     }
+
 
 } 
