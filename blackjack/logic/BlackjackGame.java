@@ -2,7 +2,7 @@ package blackjack.logic;
 
 import blackjack.actors.*;
 import blackjack.deck.*;
-import blackjack.gamerule.*;
+import blackjack.bet.*;
 import java.util.*;
 
 public class BlackjackGame {
