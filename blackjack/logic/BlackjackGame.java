@@ -34,7 +34,7 @@ public class BlackjackGame {
 
     private void initializePlayers() {
         System.out.println("==== WELCOME TO BLACKJACK ====");
-        System.out.print("Enter number of players: ");
+        System.out.print("Enter the number of players: ");
         int numPlayers = scanner.nextInt();
         scanner.nextLine();
         for (int i = 1; i <= numPlayers; i++) {
@@ -53,7 +53,7 @@ public class BlackjackGame {
 
     private void placeBets() {
         for (Player player : players) {
-            System.out.println(player.getName() + " tokens: $" + player.getTokens());
+            System.out.println(player.getName() + "'s tokens: $" + player.getTokens());
             float mainBet;
             do {
                 System.out.print(player.getName() + ", enter main bet: ");
@@ -87,7 +87,7 @@ public class BlackjackGame {
 
     private void showHands() {
         for (Player player : players) {
-            System.out.println(player.getName() + " hand: " + player.getHand() + " (sum: " + player.getSum() + ")");
+            System.out.println(player.getName() + "'s hand: " + player.getHand() + " (sum: " + player.getSum() + ")");
         }
         System.out.println("Dealer shows: " + dealer.getHand().getCards().get(0));
     }
@@ -165,9 +165,9 @@ public class BlackjackGame {
 
     private void playDealerTurn() {
         System.out.println("\nDealer's turn...");
-        System.out.println("Dealer hand: " + dealer.getHand() + " (sum: " + dealer.getSum() + ")");
+        System.out.println("Dealer's hand: " + dealer.getHand() + " (sum: " + dealer.getSum() + ")");
         dealer.takeTurn(deck);
-        System.out.println("Dealer final hand: " + dealer.getHand() + " (sum: " + dealer.getSum() + ")");
+        System.out.println("Dealer's final hand: " + dealer.getHand() + " (sum: " + dealer.getSum() + ")");
     }
 
     private void evaluateResults() {
@@ -191,7 +191,7 @@ public class BlackjackGame {
                 bettingSystem.calculatePayout(player, splitWin, splitPush);
             }
 
-            System.out.println(player.getName() + " tokens after round: $" + player.getTokens());
+            System.out.println(player.getName() + "'s tokens after round: $" + player.getTokens());
         }
     }
 }
