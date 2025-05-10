@@ -1,6 +1,5 @@
 package blackjack.actors;
 
-import java.util.*;
 import blackjack.deck.*;
 
 public class Player extends Actor {
@@ -18,17 +17,20 @@ public class Player extends Actor {
     public boolean canSplit() {
         return hand.getCards().size() == 2 &&
                hand.getCards().get(0).getRank() == hand.getCards().get(1).getRank() &&
-               tokens >= bet;
+               tokens >= bet*2;
     }
 
     public boolean split(Deck deck) {
         if (!canSplit()) return false;
+        splitHand = new Hand();
 
-        Card cardToMove = hand.getCards().remove(1);
+        Card card0 = hand.getCards().removeFirst();
+        Card card1 = hand.getCards().removeLast();        
+
         hand.reset();
-        hand.addCard(cardToMove);
+        hand.addCard(card0);
         splitHand.reset();
-        splitHand.addCard(cardToMove);
+        splitHand.addCard(card1);
 
         addCard(deck.getCard());
         splitHand.addCard(deck.getCard());
@@ -52,7 +54,7 @@ public class Player extends Actor {
     }
 
     public boolean canDouble() {
-        return hand.getCards().size() == 2 && tokens >= bet;
+        return hand.getCards().size() == 2 && tokens >= bet*2;
     }
 
     public boolean doubleDown(Deck deck) {
@@ -103,7 +105,7 @@ public class Player extends Actor {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Player p) {
-            return Objects.equals(p.name, name);
+            return name.equals(p.name);
         }
         return false;
     }
@@ -123,8 +125,20 @@ public class Player extends Actor {
 
     @Override
     public String toString() {
-        return "Player " + name + ": " + hand;
+        StringBuilder sb = new StringBuilder();
+        sb.append("Player ");
+        sb.append(name);
+        sb.append(": ");
+        sb.append(hand);
+        if (!splitHand.getCards().isEmpty()) {
+        	sb.append(", second hand: ");
+        	sb.append(splitHand);
+        }
+        sb.append(". Tokens: $");
+        sb.append(tokens);
+        return sb.toString();
     }
+    
     public void addCardToSplitHand(Card card) {
         splitHand.addCard(card);
     }

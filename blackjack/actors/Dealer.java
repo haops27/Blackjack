@@ -13,4 +13,13 @@ public class Dealer extends Actor {
             addCard(deck.getCard());
         }
     }
+    
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Dealer: ");
+        sb.append(hand);
+        return sb.toString();
+    }
+    
 }

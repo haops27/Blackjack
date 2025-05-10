@@ -1,13 +1,13 @@
 package blackjack.actors;
 
+import blackjack.deck.Card;
 import java.util.ArrayList;
 import java.util.List;
-import blackjack.deck.Card;
 
 public class Hand {
-    protected List<Card> cards;
-    protected int sum;
-    protected int aceCount;
+    private List<Card> cards;
+    private int sum;
+    private int aceCount;
 
     public Hand() {
         this.cards = new ArrayList<>();

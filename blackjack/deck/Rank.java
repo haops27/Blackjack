@@ -1,7 +1,7 @@
 package blackjack.deck;
 
 public enum Rank {
-    A(1, 11),
+    A(11, 1),
     TWO(2, 2),
     THREE(3, 3),
     FOUR(4, 4),
@@ -11,14 +11,14 @@ public enum Rank {
     EIGHT(8, 8),
     NINE(9, 9),
     TEN(10, 10),
-    J(11, 10),
-    Q(12, 10),
-    K(13, 10);
+    J(10, 11),
+    Q(10, 12),
+    K(10, 13);
 
     private final int blackjackValue;
     private final int indexValue;
 
-    Rank(int indexValue, int blackjackValue) {
+    Rank(int blackjackValue, int  indexValue) {
         this.blackjackValue = blackjackValue;
         this.indexValue = indexValue;
     }

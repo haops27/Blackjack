@@ -74,10 +74,8 @@ public class BlackjackGame {
     private void dealInitialCards() {
         for (Player player : players) {
             // override card example for testing split
-            Card c1 = new Card(Rank.EIGHT, Suit.D);
-            Card c2 = new Card(Rank.EIGHT, Suit.C);
-            player.addCard(c1);
-            player.addCard(c2);
+            player.addCard(deck.getCard());
+            player.addCard(deck.getCard());
         }
 
         for (int i = 0; i < 2; i++) {
@@ -87,9 +85,9 @@ public class BlackjackGame {
 
     private void showHands() {
         for (Player player : players) {
-            System.out.println(player.getName() + "'s hand: " + player.getHand() + " (sum: " + player.getSum() + ")");
+            System.out.println(player);
         }
-        System.out.println("Dealer shows: " + dealer.getHand().getCards().get(0));
+        System.out.println("Dealer: " + dealer.getHand().getCards().get(0) + ", HIDDEN");
     }
 
     private void playPlayerTurns() {
@@ -165,9 +163,9 @@ public class BlackjackGame {
 
     private void playDealerTurn() {
         System.out.println("\nDealer's turn...");
-        System.out.println("Dealer's hand: " + dealer.getHand() + " (sum: " + dealer.getSum() + ")");
+        System.out.println(dealer);
         dealer.takeTurn(deck);
-        System.out.println("Dealer's final hand: " + dealer.getHand() + " (sum: " + dealer.getSum() + ")");
+        System.out.println(dealer);
     }
 
     private void evaluateResults() {
