@@ -1,9 +1,10 @@
 package blackjack.logic;
 
-import blackjack.actors.*;
-import blackjack.deck.*;
-import blackjack.bet.*;
 import java.util.*;
+
+import blackjack.actors.*;
+import blackjack.bet.*;
+import blackjack.deck.*;
 
 public class BlackjackGame {
     private Scanner scanner = new Scanner(System.in);
@@ -71,19 +72,14 @@ public class BlackjackGame {
     }
 
     private void dealInitialCards() {
-    	
-    	for (Player player : players) {
+        for (Player player : players) {
+            // override card example for testing split
+            Card c1 = new Card(Rank.EIGHT, Suit.D);
+            Card c2 = new Card(Rank.EIGHT, Suit.C);
+            player.addCard(c1);
+            player.addCard(c2);
+        }
 
-		// manually override to forced split cards
-		Card c1 = new Card(Rank.EIGHT, Suit.D);
-		Card c2 = new Card(Rank.EIGHT, Suit.C);
-
-		// deal these to the first player
-		player.addCard(c1);
-		player.addCard(c2);
-		}
-		
- 
         for (int i = 0; i < 2; i++) {
             dealer.addCard(deck.getCard());
         }
@@ -93,7 +89,7 @@ public class BlackjackGame {
         for (Player player : players) {
             System.out.println(player.getName() + " hand: " + player.getHand() + " (sum: " + player.getSum() + ")");
         }
-        System.out.println("Dealer shows: " + dealer.getHand().get(0));
+        System.out.println("Dealer shows: " + dealer.getHand().getCards().get(0));
     }
 
     private void playPlayerTurns() {
@@ -103,31 +99,31 @@ public class BlackjackGame {
                 System.out.println("BLACKJACK!");
                 continue;
             }
+
             boolean endTurn = false;
             int flag = 0;
+
             while (!player.isBust() && !endTurn) {
-                System.out.print("Hit or Stay or Double Or Split? (h/s/d/sp): ");
+                System.out.print("Hit or Stay or Double or Split? (h/s/d/sp): ");
                 String move = scanner.next();
 
                 switch (move.toLowerCase()) {
-                    case "s" -> {
-                    	endTurn = true;
-                        break;
-                    }
+                    case "s" -> endTurn = true;
+
                     case "h" -> {
                         player.addCard(deck.getCard());
                         System.out.println("Hand: " + player.getHand() + " (sum: " + player.getSum() + ")");
-                        break;
                     }
+
                     case "d" -> {
                         if (player.doubleDown(deck)) {
                             endTurn = true;
-                            break;
                         }
                     }
+
                     case "sp" -> {
                         if (player.split(deck)) {
-                            // Play first hand
+                            // First hand
                             while (!player.isBust()) {
                                 System.out.print("First hand - Hit or Stay? (h/s): ");
                                 String move1 = scanner.next();
@@ -136,12 +132,12 @@ public class BlackjackGame {
                                     System.out.println("First hand: " + player.getHand() + " (sum: " + player.getSum() + ")");
                                 } else break;
                             }
-                            if(player.isBust()) {
-                            	flag = 1;
-                            	System.out.println(player.getName() + " busted!");
+                            if (player.isBust()) {
+                                flag = 1;
+                                System.out.println(player.getName() + " busted!");
                             }
 
-                            // Play second hand
+                            // Second hand
                             while (!player.isSplitBust()) {
                                 System.out.print("Second hand - Hit or Stay? (h/s): ");
                                 String move2 = scanner.next();
@@ -150,22 +146,20 @@ public class BlackjackGame {
                                     System.out.println("Second hand: " + player.getSplitHand() + " (sum: " + player.getSplitSum() + ")");
                                 } else break;
                             }
-                            if(player.isSplitBust()) {
-                            	System.out.println(player.getName() + " busted!");
+                            if (player.isSplitBust()) {
+                                System.out.println(player.getName() + " busted!");
                             }
                             endTurn = true;
-                            break;  
                         }
                     }
+
                     default -> System.out.println("Invalid input.");
                 }
-                if(player.isBust() && flag == 0) {
-                	System.out.println(player.getName() + " busted!");
-                }
-                
-            }
 
-          
+                if (player.isBust() && flag == 0) {
+                    System.out.println(player.getName() + " busted!");
+                }
+            }
         }
     }
 
@@ -182,14 +176,14 @@ public class BlackjackGame {
 
         for (Player player : players) {
             int playerSum = player.getSum();
-            System.out.println("\n=======Result for " + player.getName() + "=======");
+            System.out.println("\n======= Result for " + player.getName() + " =======");
 
             boolean playerWin = !player.isBust() && (dealerBust || playerSum > dealerSum);
             boolean push = !player.isBust() && playerSum == dealerSum;
             System.out.println("Result for main hand:");
             bettingSystem.calculatePayout(player, playerWin, push);
 
-            if (!player.getSplitHand().isEmpty()) {
+            if (!player.getSplitHand().getCards().isEmpty()) {
                 int splitSum = player.getSplitSum();
                 boolean splitWin = !player.isSplitBust() && (dealerBust || splitSum > dealerSum);
                 boolean splitPush = !player.isSplitBust() && splitSum == dealerSum;
@@ -200,5 +194,4 @@ public class BlackjackGame {
             System.out.println(player.getName() + " tokens after round: $" + player.getTokens());
         }
     }
-
 }
