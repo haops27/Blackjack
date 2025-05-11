@@ -36,11 +36,23 @@ public class Card {
 	public boolean isAce() {
 		return rank == Rank.A;
 	}
+
+	public boolean equalRank(Card c) {
+		return rank == c.rank;
+	}
+
+	public boolean equalSuit(Card c) {
+		return suit == c.suit;
+	}
+
+	public boolean equalColor(Card c) {
+		return suit.getColor().equals(c.suit.getColor());
+	}
 	
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof Card o) {
-			return o.getRank() == this.rank && o.getSuit() == this.suit;
+			return equalRank(o) && equalSuit(o);
 		}
 		return false;
 	}

@@ -1,10 +1,9 @@
 package blackjack.logic;
 
-import java.util.*;
-
 import blackjack.actors.*;
 import blackjack.bet.*;
 import blackjack.deck.*;
+import java.util.*;
 
 public class BlackjackGame {
     private Scanner scanner = new Scanner(System.in);
@@ -87,7 +86,7 @@ public class BlackjackGame {
         for (Player player : players) {
             System.out.println(player);
         }
-        System.out.println("Dealer: " + dealer.getHand().getCards().get(0) + ", HIDDEN");
+        System.out.println("Dealer: " + dealer.getHand().getCard(0) + ", HIDDEN");
     }
 
     private void playPlayerTurns() {
@@ -181,7 +180,7 @@ public class BlackjackGame {
             System.out.println("Result for main hand:");
             bettingSystem.calculatePayout(player, playerWin, push);
 
-            if (!player.getSplitHand().getCards().isEmpty()) {
+            if (player.getSplitHand().numCards() != 0) {
                 int splitSum = player.getSplitSum();
                 boolean splitWin = !player.isSplitBust() && (dealerBust || splitSum > dealerSum);
                 boolean splitPush = !player.isSplitBust() && splitSum == dealerSum;

@@ -1,6 +1,6 @@
 package blackjack.bet;
 
-import blackjack.actors.Player;
+import blackjack.actors.*;
 import blackjack.deck.Card;
 import java.util.*;
 
@@ -11,10 +11,10 @@ public class BettingSystem {
 	public boolean placeBet(float num, Player player) {
 		if (num > 0 && num <= player.getTokens()) {
 			player.setBet(num);
-			System.out.println("Player placed bet successfully");
+			System.out.println("Player " + player.getName() + " placed bet successfully");
 			return true;
 		}
-		System.out.println("Player does not have enough tokens");
+		System.out.println("Player " + player.getName() + " does not have enough tokens");
 		return false;
 	}
 	
@@ -24,15 +24,15 @@ public class BettingSystem {
 		if (playerWin) {
 			if (player.hasBlackjack()) {
 				payout = player.getBet()*1.5f;
-				System.out.println("PLAYER HAS BLACKJACK");
+				System.out.println("PLAYER " + player.getName() + " HAS BLACKJACK");
 			} else payout = player.getBet();
-			System.out.println("Player won $" + payout);
+			System.out.println("Player " + player.getName() + " won $" + payout);
 		} else if (push) {
 			payout = 0;
-			System.out.println("Player won nothing");
+			System.out.println("Player " + player.getName() + " won nothing");
 		} else {
 			payout = -player.getBet();
-			System.out.println("Player lost $" + -payout);
+			System.out.println("Player " + player.getName() + " lost $" + -payout);
 		}
 		player.setTokens(player.getTokens() + payout);
 	}
@@ -42,50 +42,50 @@ public class BettingSystem {
 		if (num > 0 && num <= player.getTokens()) {
 			sb.putIfAbsent(player, sidebet);
 			player.setSidebets(num);
-			System.out.println("Player placed sidebet successfully");
+			System.out.println("Player " + player.getName() + " placed sidebet successfully");
 			return true;
 		}
-		System.out.println("Player does not have enough tokens");
+		System.out.println("Player " + player.getName() + " does not have enough tokens");
 		return false;
 	}
 	
 	public void calculateSidebetPayout(Player player, Card dealerFirstCard) {
 		float multiplier = 0;
 		switch (sb.get(player)) {
-		case PERFECT_PAIR -> multiplier = evalPerfectPair(player.getHand().getCards());
-		case TWENTYONE_PLUS_THREE -> multiplier = eval21Plus3(player.getHand().getCards(), dealerFirstCard);
+		case PERFECT_PAIR -> multiplier = evalPerfectPair(player.getHand());
+		case TWENTYONE_PLUS_THREE -> multiplier = eval21Plus3(player.getHand(), dealerFirstCard);
 		}
 		
 		float payout;
 		
 		if (multiplier == 0) {
 			payout = -player.getSidebets();
-			System.out.println("Player lost $" + -payout + " in sidebets");
+			System.out.println("Player " + player.getName() + " lost $" + -payout + " in sidebets");
 		} else {
 			payout = player.getSidebets()*multiplier;
-			System.out.println("Player won $" + payout + " in sidebets");
+			System.out.println("Player " + player.getName() + " won $" + payout + " in sidebets");
 		}
 		player.setTokens(player.getTokens() + payout);
 		
 	}
 	
-	private float evalPerfectPair(List<Card> cards) {
+	private float evalPerfectPair(Hand hand) {
 		float multiplier = 0f;
-		Card c1 = cards.get(0);
-		Card c2 = cards.get(1);
+		Card c1 = hand.getCard(0);
+		Card c2 = hand.getCard(1);
 		if (c1.equals(c2)) multiplier = 25f;
-		else if (c1.getRank() == c2.getRank()) {
-			if (c1.getColor().equals(c2.getColor())) multiplier = 12f;
+		else if (c1.equalRank(c2)) {
+			if (c1.equalColor(c2)) multiplier = 12f;
 			else multiplier = 6f;
 		}
 		return multiplier;
 	}
 	
-	private float eval21Plus3(List<Card> cards, Card dealerFirstCard) {
+	private float eval21Plus3(Hand hand, Card dealerFirstCard) {
 		float multiplier = 0f;
 		List<Card> c = new ArrayList<>();
-		c.add(cards.get(0));
-		c.add(cards.get(1));
+		c.add(hand.getCard(0));
+		c.add(hand.getCard(1));
 		c.add(dealerFirstCard);
 		if (evalFlush(c)) {
 			if (evalStraight(c)) multiplier = 40f;
@@ -103,7 +103,7 @@ public class BettingSystem {
 	}
 	
 	private boolean evalFlush(List<Card> c) {
-		return c.get(0).getSuit() == c.get(1).getSuit() && c.get(0).getSuit() == c.get(2).getSuit();
+		return c.get(0).equalSuit(c.get(1)) && c.get(0).equalSuit(c.get(2));
 	}
 	
 	private boolean evalStraight(List<Card> c) {
@@ -115,7 +115,7 @@ public class BettingSystem {
 	}
 	
 	private boolean eval3(List<Card> c) {
-		return c.get(0).getRank() == c.get(1).getRank() && c.get(0).getRank() == c.get(2).getRank();
+		return c.get(0).equalRank(c.get(1)) && c.get(0).equalRank(c.get(2));
 	}
 	
 }

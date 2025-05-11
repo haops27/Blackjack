@@ -15,8 +15,8 @@ public class Player extends Actor {
     }
 
     public boolean canSplit() {
-        return hand.getCards().size() == 2 &&
-               hand.getCards().get(0).getRank() == hand.getCards().get(1).getRank() &&
+        return hand.numCards() == 2 &&
+               hand.getCard(0).getRank() == hand.getCard(1).getRank() &&
                tokens >= bet*2;
     }
 
@@ -24,8 +24,8 @@ public class Player extends Actor {
         if (!canSplit()) return false;
         splitHand = new Hand();
 
-        Card card0 = hand.getCards().removeFirst();
-        Card card1 = hand.getCards().removeLast();        
+        Card card0 = hand.getCard(0);
+        Card card1 = hand.getCard(0);        
 
         hand.reset();
         hand.addCard(card0);
@@ -54,7 +54,7 @@ public class Player extends Actor {
     }
 
     public boolean canDouble() {
-        return hand.getCards().size() == 2 && tokens >= bet*2;
+        return hand.numCards() == 2 && tokens >= bet*2;
     }
 
     public boolean doubleDown(Deck deck) {
@@ -130,7 +130,7 @@ public class Player extends Actor {
         sb.append(name);
         sb.append(": ");
         sb.append(hand);
-        if (!splitHand.getCards().isEmpty()) {
+        if (splitHand.numCards() != 0) {
         	sb.append(", second hand: ");
         	sb.append(splitHand);
         }

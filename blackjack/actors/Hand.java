@@ -22,7 +22,7 @@ public class Hand {
         adjustForAce();
     }
 
-    protected void adjustForAce() {
+    private void adjustForAce() {
         while (sum > 21 && aceCount > 0) {
             sum -= 10;
             aceCount--;
@@ -33,8 +33,12 @@ public class Hand {
         return sum;
     }
 
-    public List<Card> getCards() {
-        return cards;
+    public int numCards() {
+        return cards.size();
+    }
+
+    public Card getCard(int index) {
+        return cards.get(index);
     }
 
     public boolean isBust() {
