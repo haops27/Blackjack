@@ -56,9 +56,6 @@ public class Deck {
 			deck.set(i, randomCard);
 			deck.set(j, currCard);
         }
-		
-		System.out.print("DECK: ");
-	    System.out.println(deck);
 	}
 
 	public Card getCard() {

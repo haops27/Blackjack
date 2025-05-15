@@ -109,7 +109,7 @@ public class BlackjackGame {
 
                     case "h" -> {
                         player.addCard(deck.getCard());
-                        System.out.println("Hand: " + player.getHand() + " (sum: " + player.getSum() + ")");
+                        System.out.println("Hand: " + player.getHand());
                     }
 
                     case "d" -> {
@@ -179,6 +179,10 @@ public class BlackjackGame {
             boolean push = !player.isBust() && playerSum == dealerSum;
             System.out.println("Result for main hand:");
             bettingSystem.calculatePayout(player, playerWin, push);
+
+            if(player.getSidebets()>0){
+                bettingSystem.calculateSidebetPayout(player, dealer.getHand().getCard(0));
+            }
 
             if (player.getSplitHand().numCards() != 0) {
                 int splitSum = player.getSplitSum();
