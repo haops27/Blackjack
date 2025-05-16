@@ -1,60 +1,68 @@
 package blackjack.actors;
 
 import blackjack.deck.*;
+import java.util.*;
 
-public class Player extends Actor {
+public class Player extends Actor implements Iterable<Hand> {
     private float bet;
     private float sidebets;
     private float tokens = 2500f;
     private String name;
-    private Hand splitHand = new Hand();
+    private final List<Hand> hands;
+    private int handIndex = 0;
 
     public Player(String name) {
         super();
         this.name = name;
+        this.hands = new ArrayList<>();
+        hands.add(hand);
+    }
+    
+    public Player(String name, float tokens) {
+        super();
+        this.name = name;
+        this.hands = new ArrayList<>();
+        hands.add(hand);
+        this.tokens = tokens;
     }
 
-    public boolean canSplit() {
-        return hand.numCards() == 2 &&
-               hand.getCard(0).getRank() == hand.getCard(1).getRank() &&
-               tokens >= bet*2;
+    @Override
+	public void addCard(Card card) {
+		hands.get(handIndex).addCard(card);
+	}
+    
+    @Override
+    public void hit(Deck deck) {
+        addCard(deck.getCard());
+    }
+
+	public boolean canSplit() {
+        return hands.get(handIndex).numCards() == 2 &&
+               hands.get(handIndex).getCard(0).getRank() == hands.get(handIndex).getCard(1).getRank() &&
+               tokens >= bet*(hands.size() + 1);
     }
 
     public boolean split(Deck deck) {
         if (!canSplit()) return false;
-        splitHand = new Hand();
+        Hand splitHand = new Hand();
 
-        Card card0 = hand.getCard(0);
-        Card card1 = hand.getCard(0);        
+        Card card0 = hands.get(handIndex).getCard(0);
+        Card card1 = hands.get(handIndex).getCard(1);
 
-        hand.reset();
-        hand.addCard(card0);
-        splitHand.reset();
+        hands.get(handIndex).reset();
+        hands.get(handIndex).addCard(card0);
         splitHand.addCard(card1);
 
         addCard(deck.getCard());
         splitHand.addCard(deck.getCard());
+        hands.add(splitHand);
 
         System.out.println("Player has split the hand.");
-        System.out.println("First hand: " + this.hand);
-        System.out.println("Second hand: " + this.splitHand);
         return true;
     }
 
-    public Hand getSplitHand() {
-        return splitHand;
-    }
-
-    public int getSplitSum() {
-        return splitHand.getSum();
-    }
-
-    public boolean isSplitBust() {
-        return splitHand.isBust();
-    }
-
     public boolean canDouble() {
-        return hand.numCards() == 2 && tokens >= bet*2;
+        return handIndex == 0 && hand.numCards() == 2 && tokens >= bet*2;
     }
 
     public boolean doubleDown(Deck deck) {
@@ -88,18 +96,35 @@ public class Player extends Actor {
     public void setSidebets(float sidebets) {
         this.sidebets = sidebets;
     }
+    
+    public boolean hasNext() {
+    	return handIndex < hands.size();
+    }
+    
+    public void nextHand() {
+    	if (hasNext()) handIndex++;
+    }
+    
+	public Hand getHand() {
+		return hands.get(handIndex);
+	}
+    
+    public int numHands() {
+    	return hands.size();
+    }
 
-    public boolean hasBlackjack() {
-        return hand.isBlackjack();
+	@Override
+	public boolean isBust() {
+		return hands.get(handIndex).isBust();
+	}
+
+	@Override
+    public boolean isBlackjack() {
+        return hands.get(handIndex).isBlackjack();
     }
 
     public String getName() {
         return name;
-    }
-
-    @Override
-    public void takeTurn(Deck deck) {
-        addCard(deck.getCard());
     }
 
     @Override
@@ -118,7 +143,9 @@ public class Player extends Actor {
     @Override
     public void reset() {
         super.reset();
-        splitHand.reset();
+        hands.clear();
+        hands.add(hand);
+        handIndex = 0;
         this.bet = 0;
         this.sidebets = 0;
     }
@@ -128,19 +155,23 @@ public class Player extends Actor {
         StringBuilder sb = new StringBuilder();
         sb.append("Player ");
         sb.append(name);
-        sb.append(": ");
-        sb.append(hand);
-        if (splitHand.numCards() != 0) {
-        	sb.append(", second hand: ");
-        	sb.append(splitHand);
+        sb.append(": \n\t");
+        int i = 0;
+        for (Hand h : hands) {
+        	sb.append("Hand ");
+        	sb.append(++i);
+        	sb.append(": ");
+        	sb.append(h);
+        	sb.append("\n\t");
         }
-        sb.append(". Tokens: $");
+        sb.append("Tokens: $");
         sb.append(tokens);
         return sb.toString();
     }
-    
-    public void addCardToSplitHand(Card card) {
-        splitHand.addCard(card);
-    }
+
+	@Override
+	public Iterator<Hand> iterator() {
+		return hands.iterator();
+	}
 
 }

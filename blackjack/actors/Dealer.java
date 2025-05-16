@@ -7,8 +7,12 @@ public class Dealer extends Actor {
         super();
     }
 
+    public Card showFirstCard() {
+        return hand.getCard(0);
+    }
+
     @Override
-    public void takeTurn(Deck deck) {
+    public void hit(Deck deck) {
         while (hand.getSum() < 17) {
             addCard(deck.getCard());
         }

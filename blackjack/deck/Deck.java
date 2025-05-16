@@ -48,14 +48,7 @@ public class Deck {
 	
 	//Shuffle deck
 	public void shuffleDeck() {
-		Random random = new Random();
-		for (int i = deck.size()-1; i > 0; i--) {
-			int j = random.nextInt(i+1);
-			Card currCard = deck.get(i);
-			Card randomCard = deck.get(j);
-			deck.set(i, randomCard);
-			deck.set(j, currCard);
-        }
+		Collections.shuffle(deck);
 	}
 
 	public Card getCard() {

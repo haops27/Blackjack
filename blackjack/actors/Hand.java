@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Hand {
-    private List<Card> cards;
+    private final List<Card> cards;
     private int sum;
     private int aceCount;
 

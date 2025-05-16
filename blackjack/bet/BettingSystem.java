@@ -19,22 +19,30 @@ public class BettingSystem {
 	}
 	
 	//Calculate main payouts at the end of the round
-	public void calculatePayout(Player player, boolean playerWin, boolean push) {
+	public void calculatePayout(Player player, Dealer dealer) {
+		int dealerSum = dealer.getSum();
 		float payout;
-		if (playerWin) {
-			if (player.hasBlackjack()) {
-				payout = player.getBet()*1.5f;
-				System.out.println("PLAYER " + player.getName() + " HAS BLACKJACK");
-			} else payout = player.getBet();
-			System.out.println("Player " + player.getName() + " won $" + payout);
-		} else if (push) {
-			payout = 0;
-			System.out.println("Player " + player.getName() + " won nothing");
-		} else {
-			payout = -player.getBet();
-			System.out.println("Player " + player.getName() + " lost $" + -payout);
+		
+		for (Hand hand : player) {
+			int handSum = hand.getSum();
+
+            boolean win = handSum <= 21 && (dealerSum > 21 || handSum > dealerSum);
+            boolean push = handSum <= 21 && handSum == dealerSum;
+            if (win) {
+    			if (hand.isBlackjack()) {
+    				payout = player.getBet()*1.5f;
+    				System.out.println("PLAYER " + player.getName() + " HAS BLACKJACK");
+    			} else payout = player.getBet();
+    			System.out.println("Player " + player.getName() + " won $" + payout);
+    		} else if (push) {
+    			payout = 0;
+    			System.out.println("Player " + player.getName() + " won nothing");
+    		} else {
+    			payout = -player.getBet();
+    			System.out.println("Player " + player.getName() + " lost $" + -payout);
+    		}
+    		player.setTokens(player.getTokens() + payout);
 		}
-		player.setTokens(player.getTokens() + payout);
 	}
 	
 	//Place side bets

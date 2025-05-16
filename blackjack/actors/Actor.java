@@ -18,15 +18,15 @@ public abstract class Actor {
         return hand.getSum();
     }
 
-    public Hand getHand() {
-        return hand;
-    }
-
     public boolean isBust() {
         return hand.isBust();
     }
+    
+    public boolean isBlackjack() {
+    	return hand.isBlackjack();
+    }
 
-    public abstract void takeTurn(Deck deck);
+    public abstract void hit(Deck deck);
 
     public void reset() {
         hand.reset();
