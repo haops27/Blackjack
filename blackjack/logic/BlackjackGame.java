@@ -88,17 +88,15 @@ public class BlackjackGame {
             System.out.println(player);
         }
         System.out.println("Dealer: " + dealer.showFirstCard() + ", HIDDEN");
-        
-        //Calculate sidebet payouts immediately after dealing initial cards
-        for (Player player : players) {
-        	if (player.getSidebets() > 0){
-                bettingSystem.calculateSidebetPayout(player, dealer.showFirstCard());
-            }
-        }
     }
 
     private void playPlayerTurn(Player player) {
     	System.out.println("\n" + player.getName() + "'s turn:");
+
+        //Calculate sidebet payouts immediately after dealing initial cards
+        if (player.getSidebets() > 0){
+            bettingSystem.calculateSidebetPayout(player, dealer);
+        }
         
         boolean endTurn = false;
         

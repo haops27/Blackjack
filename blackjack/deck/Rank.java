@@ -18,7 +18,7 @@ public enum Rank {
     private final int blackjackValue;
     private final int indexValue;
 
-    Rank(int blackjackValue, int  indexValue) {
+    Rank(int blackjackValue, int indexValue) {
         this.blackjackValue = blackjackValue;
         this.indexValue = indexValue;
     }
