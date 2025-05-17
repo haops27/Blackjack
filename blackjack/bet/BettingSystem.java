@@ -5,6 +5,10 @@ import blackjack.deck.Card;
 import java.util.*;
 
 public class BettingSystem {
+	public enum SideBetRule {
+		PERFECT_PAIR, TWENTYONE_PLUS_THREE;
+	}
+	
 	Map<Player, SideBetRule> sb = new HashMap<>();
 
 	//Place main bets

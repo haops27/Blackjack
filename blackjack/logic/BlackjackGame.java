@@ -63,8 +63,7 @@ public class BlackjackGame {
             float sideBet = scanner.nextFloat();
             if (sideBet > 0) {
                 System.out.print("Choose side bet type (1 = PERFECT_PAIR, 2 = TWENTYONE_PLUS_THREE): ");
-                int sideType = scanner.nextInt();
-                SideBetRule rule = (sideType == 1) ? SideBetRule.PERFECT_PAIR : SideBetRule.TWENTYONE_PLUS_THREE;
+                BettingSystem.SideBetRule rule = (scanner.nextInt() == 1) ? BettingSystem.SideBetRule.PERFECT_PAIR : BettingSystem.SideBetRule.TWENTYONE_PLUS_THREE;
                 bettingSystem.placeSideBet(sideBet, player, rule);
             }
         }
