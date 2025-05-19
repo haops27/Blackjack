@@ -4,3 +4,4 @@ blackjack/test/
 *.class
 .settings/
 bin/
+/.metadata/
