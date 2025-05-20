@@ -1,0 +1,52 @@
+package blackjack.actor;
+
+import blackjack.deck.*;
+
+public class Dealer implements Playable {
+    private final Hand hand;
+
+    public Dealer() {
+        hand = new Hand();
+    }
+
+    @Override
+    public void addCard(Card card) {
+        hand.addCard(card);
+    }
+
+    @Override
+    public int getSum() {
+        return hand.getSum();
+    }
+
+    @Override
+    public boolean isBust() {
+        return hand.isBust();
+    }
+
+    @Override
+    public boolean isBlackjack() {
+        return hand.isBlackjack();
+    }
+
+    @Override
+    public void hit(Deck deck) {
+        while (hand.getSum() < 17) {
+            addCard(deck.getCard());
+        }
+    }
+
+    @Override
+    public void reset() {
+        hand.reset();
+    }
+
+    public Card showFirstCard() {
+        return hand.getCard(0);
+    }
+
+    @Override
+    public String toString() {
+        return "Dealer: " + hand.toString();
+    }
+}

@@ -1,4 +1,4 @@
-package blackjack.actors;
+package blackjack.actor;
 
 import blackjack.deck.Card;
 import java.util.ArrayList;

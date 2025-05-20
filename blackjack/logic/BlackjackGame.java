@@ -1,9 +1,10 @@
 package blackjack.logic;
 
-import blackjack.actors.*;
-import blackjack.bet.*;
-import blackjack.deck.*;
 import java.util.*;
+
+import blackjack.actor.*;
+import blackjack.bet.BettingSystem;
+import blackjack.deck.*;
 
 public class BlackjackGame {
     private final Scanner scanner = new Scanner(System.in);
@@ -20,7 +21,11 @@ public class BlackjackGame {
             placeBets();
             dealInitialCards();
             showHands();
-            for (Player player : players) playPlayerTurn(player);
+
+            for (Player player : players) {
+                playPlayerTurn(player);
+            }
+
             playDealerTurn();
             evaluateResults();
 
@@ -71,15 +76,12 @@ public class BlackjackGame {
 
     private void dealInitialCards() {
         for (Player player : players) {
-            // override card example for testing split
             player.addCard(deck.getCard());
             player.addCard(deck.getCard());
         }
-
         for (int i = 0; i < 2; i++) {
             dealer.addCard(deck.getCard());
         }
-        
     }
 
     private void showHands() {
@@ -90,55 +92,56 @@ public class BlackjackGame {
     }
 
     private void playPlayerTurn(Player player) {
-    	System.out.println("\n" + player.getName() + "'s turn:");
+        System.out.println("\n" + player.getName() + "'s turn:");
 
-        //Calculate sidebet payouts immediately after dealing initial cards
-        if (player.getSidebets() > 0){
+        if (player.getSidebets() > 0) {
             bettingSystem.calculateSidebetPayout(player, dealer);
         }
-        
+
         boolean endTurn = false;
-        
-        while (player.hasNext()) {
-        	System.out.println("Hand: " + player.getHand());
-        	if (player.isBlackjack()) {
+
+        do {
+            Hand hand = player.getCurrentHand();
+            System.out.println("Hand: " + hand);
+            if (player.isBlackjack()) {
                 System.out.println("BLACKJACK!");
+            } else {
+                while (!player.isBust() && !endTurn && player.getSum() < 21) {
+                    System.out.print("Hit or Stand or Double or Split? (h/s/d/sp): ");
+                    String move = scanner.next();
+
+                    switch (move.toLowerCase()) {
+                        case "s" -> endTurn = true;
+
+                        case "h" -> {
+                            player.hit(deck);
+                            System.out.println("Hand: " + player.getCurrentHand());
+                        }
+
+                        case "d" -> {
+                            if (player.doubleDown(deck)) {
+                                endTurn = true;
+                                System.out.println("Hand: " + player.getCurrentHand());
+                            } else System.out.println("You can't double down anymore");
+                        }
+
+                        case "sp" -> {
+                            if (!player.split(deck)) System.out.println("You can't split here");
+                            else System.out.println(player);
+                        }
+
+                        default -> System.out.println("Invalid input.");
+                    }
+
+                    if (player.isBust()) {
+                        System.out.println("Busted!");
+                    }
+                }
             }
-        	else while (!player.isBust() && !endTurn && player.getSum() < 21) {
-                System.out.print("Hit or Stand or Double or Split? (h/s/d/sp): ");
-                String move = scanner.next();
 
-                switch (move.toLowerCase()) {
-                    case "s" -> endTurn = true;
-
-                    case "h" -> {
-                        player.hit(deck);
-                        System.out.println("Hand: " + player.getHand());
-                    }
-
-                    case "d" -> {
-                        if (player.doubleDown(deck)) {
-                            endTurn = true;
-                            System.out.println("Hand: " + player.getHand());
-                        } else System.out.println("You can't double down anymore");
-                    }
-
-                    case "sp" -> {
-                        if (!player.split(deck)) System.out.println("You can't split here");
-                        else System.out.println(player);
-                    }
-
-                    default -> System.out.println("Invalid input.");
-                }
-
-                if (player.isBust()) {
-                	System.out.println("Busted!");
-                }
-        	}
-        	player.nextHand();
-        	endTurn = false;
-        }
-
+            if (!player.nextHand()) break;
+            endTurn = false;
+        } while (true);
     }
 
     private void playDealerTurn() {
@@ -150,9 +153,8 @@ public class BlackjackGame {
 
     private void evaluateResults() {
         for (Player player : players) {
-        	System.out.println("\n======= Result for " + player.getName() + " =======");
-        	bettingSystem.calculatePayout(player, dealer);
-
+            System.out.println("\n======= Result for " + player.getName() + " =======");
+            bettingSystem.calculatePayout(player, dealer);
             System.out.println(player.getName() + "'s tokens after round: $" + player.getTokens());
         }
     }
