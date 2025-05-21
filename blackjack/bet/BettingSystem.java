@@ -1,7 +1,7 @@
 package blackjack.bet;
 
 import blackjack.actor.*;
-import blackjack.deck.Card;
+import blackjack.deck.*;
 import java.util.*;
 
 public class BettingSystem {
@@ -9,9 +9,11 @@ public class BettingSystem {
         PERFECT_PAIR, TWENTYONE_PLUS_THREE;
     }
     
+    //private final Map<Player, Float> bets = new HashMap<>();
+    //private final Map<Player, Float> sidebets = new HashMap<>();
     private final Map<Player, SideBetRule> sb = new HashMap<>();
-
-    // Đặt cược chính
+    private final List<Player> insuredPlayer = new ArrayList<>();
+    
     public boolean placeBet(float num, Player player) {
         if (num > 0 && num <= player.getTokens()) {
             player.setBet(num);
@@ -46,14 +48,36 @@ public class BettingSystem {
                 payout = -player.getBet();
                 System.out.println("Player " + player.getName() + " lost $" + (-payout));
             }
-            player.setTokens(player.getTokens() + payout);
+            player.setPayout(payout);
         }
     }
-    
-    // Đặt cược phụ (side bet)
+
+    public void placeInsurance(Player player) {
+        insuredPlayer.add(player);
+    }
+
+    public boolean insurancePayout(Dealer dealer) {
+        if (dealer.isBlackjack()) {
+            System.out.println("DEALER HAS BLACKJACK!");
+
+            for (Player player : insuredPlayer) {
+                player.setPayout(player.getBet());
+                System.out.println("Player " + player.getName() + " insured successfully");
+            }
+            return true;
+        } else {
+            System.out.println("Nobody's home");
+            for (Player player : insuredPlayer) {
+                player.setPayout(-player.getBet()/2);
+                System.out.println("Player " + player.getName() + " lost $" + player.getBet()/2);
+            }
+            return false;
+        }
+    }
+
     public boolean placeSideBet(float num, Player player, SideBetRule sidebet) {
         if (num > 0 && num <= player.getTokens()) {
-            sb.putIfAbsent(player, sidebet);
+            sb.put(player, sidebet);
             player.setSidebets(num);
             System.out.println("Player " + player.getName() + " placed sidebet successfully");
             return true;
@@ -62,20 +86,11 @@ public class BettingSystem {
         return false;
     }
     
-    // Tính tiền thắng thua cược phụ (side bet)
     public void calculateSidebetPayout(Player player, Dealer dealer) {
-        // Lấy tay bài đầu tiên để tính side bet
-        Hand firstHand = player.iterator().next();
-
-        SideBetRule rule = sb.get(player);
-        if (rule == null) {
-            System.out.println("Player " + player.getName() + " has no side bet rule assigned");
-            return;
-        }
-
-        float multiplier = switch (rule) {
-            case PERFECT_PAIR -> evalPerfectPair(firstHand);
-            case TWENTYONE_PLUS_THREE -> eval21Plus3(firstHand, dealer.showFirstCard());
+        float multiplier = switch (sb.get(player)) {
+            case PERFECT_PAIR -> evalPerfectPair(player.getCurrentHand());
+            case TWENTYONE_PLUS_THREE -> eval21Plus3(player.getCurrentHand(), dealer.showFirstCard());
+            default -> 0;
         };
 
         float payout;
@@ -87,25 +102,23 @@ public class BettingSystem {
             payout = player.getSidebets() * multiplier;
             System.out.println("Player " + player.getName() + " won $" + payout + " in sidebets");
         }
-        player.setTokens(player.getTokens() + payout);
+        player.setPayout(payout);
     }
     
-    // Tính multiplier cho Perfect Pair
     private float evalPerfectPair(Hand hand) {
         if (hand.numCards() < 2) return 0f;
 
         Card c1 = hand.getCard(0);
         Card c2 = hand.getCard(1);
 
-        if (c1.equals(c2)) return 25f; // Perfect pair: giống rank và chất
+        if (c1.equals(c2)) return 25f;
         else if (c1.equalRank(c2)) {
-            if (c1.equalColor(c2)) return 12f; // Same color
-            else return 6f; // Different color
+            if (c1.equalColor(c2)) return 12f;
+            else return 6f;
         }
         return 0f;
     }
     
-    // Tính multiplier cho 21+3
     private float eval21Plus3(Hand hand, Card dealerFirstCard) {
         if (hand.numCards() < 2) return 0f;
 

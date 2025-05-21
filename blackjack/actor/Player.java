@@ -1,10 +1,9 @@
 package blackjack.actor;
 
+import blackjack.deck.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import blackjack.deck.*;
 
 public class Player implements Playable, Iterable<Hand> {
     private final List<Hand> hands;
@@ -116,13 +115,12 @@ public class Player implements Playable, Iterable<Hand> {
         return true;
     }
 
-    // Getters and setters
     public float getTokens() {
         return tokens;
     }
 
-    public void setTokens(float tokens) {
-        this.tokens = tokens;
+    public void setPayout(float payout) {
+        this.tokens += payout;
     }
 
     public void setBet(float bet) {

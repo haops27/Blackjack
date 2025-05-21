@@ -1,10 +1,9 @@
 package blackjack.logic;
 
-import java.util.*;
-
 import blackjack.actor.*;
 import blackjack.bet.BettingSystem;
 import blackjack.deck.*;
+import java.util.*;
 
 public class BlackjackGame {
     private final Scanner scanner = new Scanner(System.in);
@@ -20,13 +19,12 @@ public class BlackjackGame {
             resetRound();
             placeBets();
             dealInitialCards();
-            showHands();
-
-            for (Player player : players) {
-                playPlayerTurn(player);
+            if (!placeInsurances()) {
+                for (Player player : players) {
+                    playPlayerTurn(player);
+                }
+                playDealerTurn();
             }
-
-            playDealerTurn();
             evaluateResults();
 
             System.out.print("\nPlay another round? (y/n): ");
@@ -82,13 +80,32 @@ public class BlackjackGame {
         for (int i = 0; i < 2; i++) {
             dealer.addCard(deck.getCard());
         }
-    }
 
-    private void showHands() {
         for (Player player : players) {
             System.out.println(player);
         }
         System.out.println("Dealer: " + dealer.showFirstCard() + ", HIDDEN");
+    }
+
+    private boolean placeInsurances() {
+        if (dealer.showFirstCard().getRank() == Rank.A) {
+            System.out.println("Dealer has an Ace, press y to place insurance, otherwise press n");
+            for (Player player : players) {
+                System.out.print(player.getName() + ": ");
+                String move = scanner.next();
+                if (move.equals("y")) {
+                    bettingSystem.placeInsurance(player);
+                }
+            }
+            
+            if (bettingSystem.insurancePayout(dealer)) {
+                for (Player player : players) {
+                    if (player.getSidebets() > 0) bettingSystem.calculateSidebetPayout(player, dealer);
+                }
+                return true;
+            }
+        }
+        return false;
     }
 
     private void playPlayerTurn(Player player) {
@@ -98,30 +115,33 @@ public class BlackjackGame {
             bettingSystem.calculateSidebetPayout(player, dealer);
         }
 
-        boolean endTurn = false;
-
         do {
             Hand hand = player.getCurrentHand();
             System.out.println("Hand: " + hand);
             if (player.isBlackjack()) {
                 System.out.println("BLACKJACK!");
             } else {
-                while (!player.isBust() && !endTurn && player.getSum() < 21) {
-                    System.out.print("Hit or Stand or Double or Split? (h/s/d/sp): ");
+                outer: while (!player.isBust()) {
+                    System.out.println("Hit or Stand or Double or Split? (h/s/d/sp)");
                     String move = scanner.next();
 
                     switch (move.toLowerCase()) {
-                        case "s" -> endTurn = true;
+                        case "s" -> {
+                            break outer;
+                        }
 
                         case "h" -> {
                             player.hit(deck);
                             System.out.println("Hand: " + player.getCurrentHand());
+                            if (player.isBust()) {
+                                System.out.println("Busted!");
+                            }
                         }
 
                         case "d" -> {
                             if (player.doubleDown(deck)) {
-                                endTurn = true;
                                 System.out.println("Hand: " + player.getCurrentHand());
+                                break outer;
                             } else System.out.println("You can't double down anymore");
                         }
 
@@ -132,16 +152,11 @@ public class BlackjackGame {
 
                         default -> System.out.println("Invalid input.");
                     }
-
-                    if (player.isBust()) {
-                        System.out.println("Busted!");
-                    }
+                    
                 }
             }
 
-            if (!player.nextHand()) break;
-            endTurn = false;
-        } while (true);
+        } while (player.nextHand());
     }
 
     private void playDealerTurn() {
