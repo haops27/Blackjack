@@ -9,13 +9,11 @@ public class BettingSystem {
         PERFECT_PAIR, TWENTYONE_PLUS_THREE;
     }
     
-    //private final Map<Player, Float> bets = new HashMap<>();
-    //private final Map<Player, Float> sidebets = new HashMap<>();
     private final Map<Player, SideBetRule> sb = new HashMap<>();
     private final List<Player> insuredPlayer = new ArrayList<>();
     
     public boolean placeBet(float num, Player player) {
-        if (num > 0 && num <= player.getTokens()) {
+        if (num > 0 && num <= player.getAvailableTokens()) {
             player.setBet(num);
             System.out.println("Player " + player.getName() + " placed bet successfully");
             return true;
@@ -48,7 +46,7 @@ public class BettingSystem {
                 payout = -player.getBet();
                 System.out.println("Player " + player.getName() + " lost $" + (-payout));
             }
-            player.setPayout(payout);
+            player.setTokens(payout);
         }
     }
 
@@ -61,14 +59,14 @@ public class BettingSystem {
             System.out.println("DEALER HAS BLACKJACK!");
 
             for (Player player : insuredPlayer) {
-                player.setPayout(player.getBet());
+                player.setTokens(player.getBet());
                 System.out.println("Player " + player.getName() + " insured successfully");
             }
             return true;
         } else {
             System.out.println("Nobody's home");
             for (Player player : insuredPlayer) {
-                player.setPayout(-player.getBet()/2);
+                player.setTokens(-player.getBet()/2);
                 System.out.println("Player " + player.getName() + " lost $" + player.getBet()/2);
             }
             return false;
@@ -76,7 +74,7 @@ public class BettingSystem {
     }
 
     public boolean placeSideBet(float num, Player player, SideBetRule sidebet) {
-        if (num > 0 && num <= player.getTokens()) {
+        if (num > 0 && num <= player.getAvailableTokens()) {
             sb.put(player, sidebet);
             player.setSidebets(num);
             System.out.println("Player " + player.getName() + " placed sidebet successfully");
@@ -102,7 +100,7 @@ public class BettingSystem {
             payout = player.getSidebets() * multiplier;
             System.out.println("Player " + player.getName() + " won $" + payout + " in sidebets");
         }
-        player.setPayout(payout);
+        player.setTokens(payout);
     }
     
     private float evalPerfectPair(Hand hand) {

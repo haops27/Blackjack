@@ -28,7 +28,7 @@ public class Card {
 		return suit;
 	}
 	
-	public String getColor() {
+	public Suit.Color getColor() {
 		return suit.getColor();
 	}
 	
@@ -46,7 +46,7 @@ public class Card {
 	}
 
 	public boolean equalColor(Card c) {
-		return suit.getColor().equals(c.suit.getColor());
+		return suit.getColor() == c.suit.getColor();
 	}
 	
 	@Override

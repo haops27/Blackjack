@@ -1,18 +1,22 @@
 package blackjack.deck;
 
 public enum Suit {
-    C("black"),
-    D("red"),
-    H("red"),
-    S("black");
+    C(Color.BLACK),
+    D(Color.RED),
+    H(Color.RED),
+    S(Color.BLACK);
 
-    private final String color;
+    public enum Color {
+        RED, BLACK;
+    }
 
-    Suit(String color) {
+    private final Color color;
+
+    Suit(Color color) {
         this.color = color;
     }
 
-    public String getColor() {
+    public Color getColor() {
         return color;
     }
 }
