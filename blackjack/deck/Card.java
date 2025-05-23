@@ -3,15 +3,18 @@ package blackjack.deck;
 public class Card {
 	// Name of each cards in folder "cards"
 	private final Rank rank; // Số
-	private final Suit suit;  // Chất
+	private final Suit suit; // Chất
 	
-	public Card(Rank rank, Suit suit){
+	public Card(Rank rank, Suit suit) {
 		this.rank = rank;
 		this.suit = suit;
 	}
 	
     @Override
 	public String toString() {
+		if (rank == null && suit == null) {
+			return "WILD CARD";
+		}
 		return rank + " - " + suit;
 	}
 	

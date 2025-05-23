@@ -8,5 +8,5 @@ public interface Playable {
     boolean isBust();
     boolean isBlackjack();
     void hit(Deck deck);
-    void reset();
+    void reset(Deck deck);
 }

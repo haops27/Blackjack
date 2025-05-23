@@ -46,9 +46,12 @@ public class BlackjackGame {
     }
 
     private void resetRound() {
-        dealer.reset();
+        dealer.reset(deck);
         for (Player player : players) {
-            player.reset();
+            player.reset(deck);
+        }
+        if (deck.reshuffle()) {
+            System.out.println("Red card reached — reshuffling before next round.");
         }
         System.out.println("\n==== NEW GAME ====");
     }
@@ -116,12 +119,11 @@ public class BlackjackGame {
         }
 
         do {
-            Hand hand = player.getCurrentHand();
-            System.out.println("Hand: " + hand);
+            System.out.println("Hand: " + player.getCurrentHand());
             if (player.isBlackjack()) {
                 System.out.println("BLACKJACK!");
             } else {
-                outer: while (!player.isBust()) {
+                outer: while (player.getSum() < 21) {
                     System.out.println("Hit or Stand or Double or Split? (h/s/d/sp)");
                     String move = scanner.next();
 
@@ -148,6 +150,7 @@ public class BlackjackGame {
                         case "sp" -> {
                             if (!player.split(deck)) System.out.println("You can't split here");
                             else System.out.println(player);
+                            System.out.println("Hand: " + player.getCurrentHand());
                         }
 
                         default -> System.out.println("Invalid input.");

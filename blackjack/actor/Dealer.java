@@ -37,7 +37,10 @@ public class Dealer implements Playable {
     }
 
     @Override
-    public void reset() {
+    public void reset(Deck deck) {
+        for (int i = 0; i < hand.numCards(); i++) {
+            deck.discard(hand.getCard(i));
+        }
         hand.reset();
     }
 
