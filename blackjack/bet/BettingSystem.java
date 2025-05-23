@@ -22,7 +22,6 @@ public class BettingSystem {
         return false;
     }
     
-    // Tính tiền thắng thua cược chính sau ván
     public void calculatePayout(Player player, Dealer dealer) {
         int dealerSum = dealer.getSum();
         float payout;
@@ -47,6 +46,7 @@ public class BettingSystem {
                 System.out.println("Player " + player.getName() + " lost $" + (-payout));
             }
             player.setTokens(payout);
+            player.setBet(0);
         }
     }
 
@@ -101,6 +101,7 @@ public class BettingSystem {
             System.out.println("Player " + player.getName() + " won $" + payout + " in sidebets");
         }
         player.setTokens(payout);
+        player.setSidebets(0);
     }
     
     private float evalPerfectPair(Hand hand) {

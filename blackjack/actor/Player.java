@@ -77,7 +77,7 @@ public class Player implements Playable, Iterable<Hand> {
         Hand hand = getCurrentHand();
         return hands.size() <= MAX_HANDS && hand.numCards() == 2 &&
                hand.getCard(0).getRank() == hand.getCard(1).getRank() &&
-               tokens >= bet * (hands.size() + 1) + sidebets;
+               tokens >= bet * (hands.size() + 1);
     }
 
     public boolean split(Deck deck) {
@@ -104,7 +104,7 @@ public class Player implements Playable, Iterable<Hand> {
     }
 
     public boolean canDouble() {
-        return hands.size() == 1 && getCurrentHand().numCards() == 2 && tokens >= bet * 2 + sidebets;
+        return hands.size() == 1 && getCurrentHand().numCards() == 2 && tokens >= bet * 2;
     }
 
     public boolean doubleDown(Deck deck) {

@@ -28,10 +28,6 @@ public class Card {
 		return suit;
 	}
 	
-	public Suit.Color getColor() {
-		return suit.getColor();
-	}
-	
 	//check that a cards is an Ace or not
 	public boolean isAce() {
 		return rank == Rank.A;
@@ -51,8 +47,8 @@ public class Card {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof Card o) {
-			return equalRank(o) && equalSuit(o);
+		if (obj instanceof Card c) {
+			return equalRank(c) && equalSuit(c);
 		}
 		return false;
 	}

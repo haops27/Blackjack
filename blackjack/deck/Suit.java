@@ -1,14 +1,14 @@
 package blackjack.deck;
 
+enum Color {
+    RED, BLACK;
+}
+
 public enum Suit {
     C(Color.BLACK),
     D(Color.RED),
     H(Color.RED),
     S(Color.BLACK);
-
-    public enum Color {
-        RED, BLACK;
-    }
 
     private final Color color;
 
@@ -16,7 +16,7 @@ public enum Suit {
         this.color = color;
     }
 
-    public Color getColor() {
+    Color getColor() {
         return color;
     }
 }
