@@ -46,8 +46,8 @@ public class BettingSystem {
                 System.out.println("Player " + player.getName() + " lost $" + (-payout));
             }
             player.setTokens(payout);
-            player.setBet(0);
         }
+        player.setBet(0);
     }
 
     public void placeInsurance(Player player) {
@@ -62,6 +62,7 @@ public class BettingSystem {
                 player.setTokens(player.getBet());
                 System.out.println("Player " + player.getName() + " insured successfully");
             }
+            insuredPlayer.clear();
             return true;
         } else {
             System.out.println("Nobody's home");
@@ -69,6 +70,7 @@ public class BettingSystem {
                 player.setTokens(-player.getBet()/2);
                 System.out.println("Player " + player.getName() + " lost $" + player.getBet()/2);
             }
+            insuredPlayer.clear();
             return false;
         }
     }

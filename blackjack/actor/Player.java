@@ -57,8 +57,6 @@ public class Player implements Playable, Iterable<Hand> {
         hands.clear();
         hands.add(new Hand());
         currentHandIndex = 0;
-        bet = 0;
-        sidebets = 0;
     }
 
     public boolean nextHand() {
