@@ -29,7 +29,6 @@ public class Dealer implements Playable {
         return hand.isBlackjack();
     }
 
-    @Override
     public void hit(Deck deck) {
         while (hand.getSum() < 17) {
             addCard(deck.getCard());

@@ -7,6 +7,5 @@ public interface Playable {
     int getSum();
     boolean isBust();
     boolean isBlackjack();
-    void hit(Deck deck);
     void reset(Deck deck);
 }

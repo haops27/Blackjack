@@ -33,7 +33,7 @@ public class BlackjackGame {
 
         System.out.println("Thanks for playing!");
     }
-
+    //DONE
     private void initializePlayers() {
         System.out.println("==== WELCOME TO BLACKJACK ====");
         System.out.print("Enter the number of players: ");
@@ -44,7 +44,7 @@ public class BlackjackGame {
             players.add(new Player(scanner.nextLine()));
         }
     }
-
+    //DONE
     private void resetRound() {
         dealer.reset(deck);
         for (Player player : players) {
@@ -55,7 +55,7 @@ public class BlackjackGame {
         }
         System.out.println("\n==== NEW GAME ====");
     }
-
+    //DONE
     private void placeBets() {
         for (Player player : players) {
             System.out.println(player.getName() + "'s tokens: $" + player.getTokens());
@@ -74,7 +74,7 @@ public class BlackjackGame {
             }
         }
     }
-
+    //DONE
     private void dealInitialCards() {
         for (Player player : players) {
             player.addCard(deck.getCard());
@@ -133,7 +133,7 @@ public class BlackjackGame {
                         }
 
                         case "h" -> {
-                            player.hit(deck);
+                            player.addCard(deck.getCard());
                             System.out.println("Hand: " + player.getCurrentHand());
                             if (player.isBust()) {
                                 System.out.println("Busted!");

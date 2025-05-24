@@ -48,11 +48,6 @@ public class Player implements Playable, Iterable<Hand> {
     }
 
     @Override
-    public void hit(Deck deck) {
-        addCard(deck.getCard());
-    }
-
-    @Override
     public void reset(Deck deck) {
         for (Hand hand : hands) {
             for (int i = 0; i < hand.numCards(); i++) {
