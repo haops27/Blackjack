@@ -14,6 +14,10 @@ public class Hand {
         this.sum = 0;
         this.aceCount = 0;
     }
+    
+    public List<Card> getCards() {
+    	return cards;
+    }
 
     public void addCard(Card card) {
         cards.add(card);

@@ -8,6 +8,10 @@ public class Dealer implements Playable {
     public Dealer() {
         hand = new Hand();
     }
+    
+    public Hand getHand() {
+    	return hand;
+    }
 
     @Override
     public void addCard(Card card) {

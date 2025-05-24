@@ -89,7 +89,7 @@ public class BlackjackGame {
         }
         System.out.println("Dealer: " + dealer.showFirstCard() + ", HIDDEN");
     }
-
+    //DONE
     private boolean placeInsurances() {
         if (dealer.showFirstCard().getRank() == Rank.A) {
             System.out.println("Dealer has an Ace, press y to place insurance, otherwise press n");
@@ -161,14 +161,15 @@ public class BlackjackGame {
 
         } while (player.nextHand());
     }
-
+    
+    //DONE
     private void playDealerTurn() {
         System.out.println("\nDealer's turn...");
         System.out.println(dealer);
         dealer.hit(deck);
         System.out.println(dealer);
     }
-
+    //DONE
     private void evaluateResults() {
         for (Player player : players) {
             System.out.println("\n======= Result for " + player.getName() + " =======");

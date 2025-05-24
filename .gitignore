@@ -4,3 +4,5 @@ blackjack/test/
 *.class
 .settings/
 bin/
+BlackjackGame.java
+GameEngine.java
