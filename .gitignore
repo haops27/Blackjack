@@ -4,4 +4,9 @@ blackjack/test/
 *.class
 .settings/
 bin/
+<<<<<<< HEAD
 /.metadata/
+=======
+BlackjackGame.java
+GameEngine.java
+>>>>>>> 0e6fe960e5363d30861a3da36686f6f87a0899f4

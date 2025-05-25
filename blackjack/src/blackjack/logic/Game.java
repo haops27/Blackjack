@@ -1,0 +1,171 @@
+package blackjack.logic;
+
+import blackjack.actor.Dealer;
+import blackjack.actor.Player;
+import blackjack.bet.BettingSystem;
+import blackjack.bet.BettingSystem.SideBetRule;
+import blackjack.deck.Deck;
+import blackjack.deck.Rank;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+public class Game {
+    private final Deck deck = new Deck(6);
+    private final Dealer dealer = new Dealer();
+    private final BettingSystem bettingSystem = new BettingSystem();
+    private final List<Player> players = new ArrayList<>();
+    private int currentPlayerIndex = 0;
+
+    /**
+     * Khởi tạo danh sách người chơi theo tên.
+     * Xóa danh sách cũ nếu có.
+     */
+    public void initializePlayers(List<String> names) {
+        players.clear();
+        for (String name : names) {
+            players.add(new Player(name));
+        }
+    }
+
+    public Dealer getDealer() {
+        return dealer;
+    }
+
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    /**
+     * Reset vòng chơi:
+     * - Trộn lại bộ bài nếu cần
+     * - Reset tay dealer và người chơi
+     * - Reset index người chơi hiện tại
+     */
+    public void resetRound() {
+        boolean reshuffled = deck.reshuffle();
+        if (reshuffled) {
+            System.out.println("Deck reshuffled due to red card.");
+        }
+        dealer.reset(deck);
+        for (Player player : players) {
+            player.reset(deck);
+        }
+        currentPlayerIndex = 0;
+    }
+
+    /**
+     * Chia bài đầu cho tất cả người chơi và dealer
+     * Mỗi người chơi nhận 2 lá, dealer nhận 2 lá.
+     */
+    public void dealInitialCards() {
+        for (Player player : players) {
+            player.addCard(deck.getCard());
+            player.addCard(deck.getCard());
+            System.out.println("Player " + player.getName() + " initial cards: " + player.getCurrentHand().getCards());
+        }
+        dealer.addCard(deck.getCard());
+        dealer.addCard(deck.getCard());
+        System.out.println("Dealer cards: " + dealer.getHand().getCards());
+    }
+
+    /**
+     * Người chơi đặt cược chính và cược phụ side bets
+     * Nếu side bet > 0 và sideBetRules không rỗng thì đặt cược phụ
+     */
+    public void placeBets(Player player, float mainBet, float sideBet, Set<SideBetRule> sideBetRules) {
+        bettingSystem.placeBet(mainBet, player);
+
+        if (sideBet > 0 && sideBetRules != null && !sideBetRules.isEmpty()) {
+            bettingSystem.placeSideBet(sideBet, player, sideBetRules);
+        }
+    }
+
+    /**
+     * Kiểm tra dealer có lá bài đầu là Ace không
+     */
+    public boolean dealerHasAce() {
+        return dealer.showFirstCard().getRank() == Rank.A;
+    }
+
+    /**
+     * Người chơi đặt bảo hiểm nếu dealer có lá bài đầu là Ace
+     */
+    public void placeInsurance(Player player) {
+        if (dealerHasAce()) {
+            bettingSystem.placeInsurance(player);
+        }
+    }
+
+    /**
+     * Thanh toán bảo hiểm sau khi dealer lật bài
+     */
+    public boolean insurancePayout() {
+        return bettingSystem.insurancePayout(dealer);
+    }
+
+    /**
+     * Lấy người chơi hiện tại (theo currentPlayerIndex)
+     */
+    public Player getCurrentPlayer() {
+        return players.get(currentPlayerIndex);
+    }
+
+    /**
+     * Chuyển sang người chơi kế tiếp.
+     * Trả về true nếu còn người chơi tiếp theo,
+     * false nếu đã hết lượt người chơi.
+     */
+    public boolean nextPlayer() {
+        if (currentPlayerIndex < players.size() - 1) {
+            currentPlayerIndex++;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Thực hiện split cho người chơi
+     */
+    public void split(Player player) {
+        player.split(deck);
+    }
+
+    /**
+     * Thực hiện double down cho người chơi
+     */
+    public void doubleDown(Player player) {
+        player.doubleDown(deck);
+    }
+
+    /**
+     * Dealer thực hiện lượt chơi theo luật
+     */
+    public void dealerPlay() {
+        dealer.hit(deck);
+    }
+
+    /**
+     * Tính tiền thắng thua cho cược phụ của người chơi
+     */
+    public void evaluateSidebetPayouts(Player player) {
+        bettingSystem.calculateSidebetPayout(player, dealer);
+    }
+
+    /**
+     * Lấy bộ bài
+     */
+    public Deck getDeck() {
+        return deck;
+    }
+
+    /**
+     * Tính tiền thắng thua cho cược chính của tất cả người chơi
+     */
+    public void evaluateResults() {
+        for (Player player : players) {
+            bettingSystem.calculatePayout(player, dealer);
+        }
+    }
+}
