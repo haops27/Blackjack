@@ -41,8 +41,8 @@ public class Deck {
   	    discardPile.add(card);
   	}
 
-    private void placeRedCard() {
-    	position = (int)(deck.size() * 0.75);
+    private void placeWildCard() {
+    	position = (int)(deck.size() * 0.3);
     	deck.add(position, WILDCARD);
     }
 
@@ -60,7 +60,7 @@ public class Deck {
 
     public void shuffleDeck() {
         Collections.shuffle(deck);
-        placeRedCard();
+        placeWildCard();
     }
 
     public Card getCard() {

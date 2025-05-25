@@ -15,7 +15,7 @@ public class Card {
 		if (rank == null && suit == null) {
 			return "WILD CARD";
 		}
-		return rank + " - " + suit;
+		return rank + "-" + suit;
 	}
 	
 	//get value of each cards: 2-10 are equal to themselves; J, Q, K are considered as 10; Ace is 1 or 11 for some case
@@ -48,6 +48,10 @@ public class Card {
 		return suit.getColor() == c.suit.getColor();
 	}
 	
+	public boolean equalValue(Card c) {
+		return rank.getBlackjackValue() == c.rank.getBlackjackValue();
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof Card c) {
@@ -57,20 +61,6 @@ public class Card {
 	}
 
 	public String getImagePath() {
-	    // Xử lý đặc biệt cho các lá bài A, J, Q, K
-	    String rankStr;
-	    switch (rank) {
-	        case A: rankStr = "A"; break;
-	        case J: rankStr = "J"; break;
-	        case Q: rankStr = "Q"; break;
-	        case K: rankStr = "K"; break;
-	        default: rankStr = rank.toString(); // 2-10 trả về số chuỗi
-	    }
-
-	    // Suit sẽ trả về C, D, H, S đúng như tên file ảnh
-	    String suitStr = suit.toString();
-
-	    // Trả về đường dẫn file chuẩn theo thư mục resources/cards
-	    return "/cards/" + rankStr + "-" + suitStr + ".png";
+	    return "/blackjack/resources/cards/" + toString() + ".png";
 	}
 }

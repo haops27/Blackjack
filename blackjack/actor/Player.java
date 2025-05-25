@@ -75,7 +75,7 @@ public class Player implements Playable, Iterable<Hand> {
     public boolean canSplit() {
         Hand hand = getCurrentHand();
         return hands.size() < MAX_HANDS && hand.numCards() == 2 &&
-               hand.getCard(0).getRank() == hand.getCard(1).getRank() &&
+        	   hand.getCard(0).equalValue(hand.getCard(1)) &&
                tokens >= bet * (hands.size() + 1);
     }
 

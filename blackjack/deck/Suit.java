@@ -1,14 +1,14 @@
 package blackjack.deck;
 
-enum Color {
-    RED, BLACK;
-}
-
 public enum Suit {
     C(Color.BLACK),
     D(Color.RED),
     H(Color.RED),
     S(Color.BLACK);
+	
+	enum Color {
+	    RED, BLACK;
+	}
 
     private final Color color;
 
