@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class Player implements Playable, Iterable<Hand> {
+public class Player implements Playable {
     private final List<Hand> hands;
     private int currentHandIndex = 0;
     private static int MAX_HANDS = 2;
@@ -65,6 +65,7 @@ public class Player implements Playable, Iterable<Hand> {
             currentHandIndex++;
             return true;
         }
+        currentHandIndex = 0;
         return false;
     }
 
@@ -166,11 +167,6 @@ public class Player implements Playable, Iterable<Hand> {
     @Override
     public int hashCode() {
         return name.hashCode();
-    }
-
-    @Override
-    public Iterator<Hand> iterator() {
-        return hands.iterator();
     }
 
     @Override

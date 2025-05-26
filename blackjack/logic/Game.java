@@ -70,21 +70,14 @@ public class Game {
         	 c2 = new Card(Rank.EIGHT, Suit.D);
 
         	 // deal these to the first player
-        	  player.addCard(c1);
-        	  player.addCard(c2);
-        	}
-
-
-            /*for (Player player : players) {
-                // override card example for testing split
-                player.addCard(deck.getCard());
-                player.addCard(deck.getCard());
-            }*/
+        	 player.addCard(c1);
+        	 player.addCard(c2);
+        }
 
     	Card c3 = deck.getCard();
     	Card c4 = deck.getCard();
     	c3 = new Card(Rank.A, Suit.H);
-   	    c4 = new Card(Rank.TEN, Suit.D);
+   	    c4 = new Card(Rank.J, Suit.D);
         dealer.addCard(c3);
         dealer.addCard(c4);
         System.out.println("Dealer cards: " + dealer.getHand().getCards());
@@ -144,6 +137,7 @@ public class Game {
     			currentPlayerIndex++;
                 return true;
     		}
+    		currentPlayerIndex = 0;
     	}
     	return false;
     }

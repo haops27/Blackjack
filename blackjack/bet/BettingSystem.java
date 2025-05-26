@@ -37,9 +37,10 @@ public class BettingSystem {
     public void calculatePayout(Player player, Dealer dealer) {
         int dealerSum = dealer.getSum();
         float payout;
-
-        for (Hand hand : player) {
-            int handSum = hand.getSum();
+        
+        do {
+        	Hand hand = player.getCurrentHand();
+        	int handSum = hand.getSum();
 
             boolean win = handSum <= 21 && (dealerSum > 21 || handSum > dealerSum);
             boolean push = handSum <= 21 && handSum == dealerSum;
@@ -64,7 +65,7 @@ public class BettingSystem {
                 hand.setStatus(Hand.Status.LOST);
             }
             player.setTokens(payout);
-        }
+        } while (player.nextHand());
         player.setBet(0);
     }
 
