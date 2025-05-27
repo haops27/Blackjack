@@ -7,9 +7,9 @@ import java.util.List;
 public class Deck {
     private final List<Card> deck;
     private final List<Card> discardPile;
-	private static final Card WILDCARD = new Card(null, null);
-	private boolean wildCardReached = false;
-	private int position;
+    private static final Card WILDCARD = new Card(null, null);
+    private boolean wildCardReached = false;
+    private int position;
     private static final Rank[] ranks = {Rank.A, Rank.TWO, Rank.THREE, Rank.FOUR, Rank.FIVE, Rank.SIX, Rank.SEVEN, Rank.EIGHT, Rank.NINE, Rank.TEN, Rank.J, Rank.Q, Rank.K};
     private static final Suit[] suits = {Suit.C, Suit.D, Suit.H, Suit.S};
 
@@ -38,17 +38,17 @@ public class Deck {
     }
 
     public void discard(Card card) {
-  	    discardPile.add(card);
-  	}
-
-    private void placeRedCard() {
-    	position = (int)(deck.size() * 0.75);
-    	deck.add(position, WILDCARD);
+        discardPile.add(card);
     }
 
-    //Reshufflle
-  	public boolean reshuffle() {
-  	    if (wildCardReached) {
+    private void placeWildCard() {
+        position = (int)(deck.size() * 0.3);
+        deck.add(position, WILDCARD);
+    }
+
+    // Reshuffle
+    public boolean reshuffle() {
+        if (wildCardReached) {
             deck.addAll(discardPile);
             discardPile.clear();
             shuffleDeck();
@@ -56,23 +56,42 @@ public class Deck {
             return true;
         }
         return false;
-  	}
+    }
 
     public void shuffleDeck() {
         Collections.shuffle(deck);
-        placeRedCard();
+        placeWildCard();
     }
 
     public Card getCard() {
-  		if (deck.isEmpty()) {
-  			throw new IllegalStateException("Deck is empty!");
-  		}
-  		Card card = deck.removeLast();
-  		if (card.equals(WILDCARD)) {
-  			wildCardReached = true;
-  			return getCard();
-  		}
-  		return card;
-  	}
+        if (deck.isEmpty()) {
+            throw new IllegalStateException("Deck is empty!");
+        }
+        Card card = deck.remove(deck.size() - 1); // fix removeLast() not exists
+        if (card.equals(WILDCARD)) {
+            wildCardReached = true;
+            return getCard();
+        }
+        return card;
+    }
+
+    public int size() {
+        return deck.size();
+    }
+
+    public void clear() {
+        deck.clear();
+    }
+    public void reset() {
+        deck.clear();
+        discardPile.clear();
+        for (Suit s : suits) {
+            for (Rank r : ranks) {
+                deck.add(new Card(r, s));
+            }
+        }
+        shuffleDeck();
+        wildCardReached = false;
+    }
 
 }

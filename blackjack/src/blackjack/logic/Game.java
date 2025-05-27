@@ -4,8 +4,10 @@ import blackjack.actor.Dealer;
 import blackjack.actor.Player;
 import blackjack.bet.BettingSystem;
 import blackjack.bet.BettingSystem.SideBetRule;
+import blackjack.deck.Card;
 import blackjack.deck.Deck;
 import blackjack.deck.Rank;
+import blackjack.deck.Suit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,14 +21,14 @@ public class Game {
     private int currentPlayerIndex = 0;
 
     /**
-     * Khởi tạo danh sách người chơi theo tên.
+     * Khởi tạo danh sách người chơi theo tên.<br>
      * Xóa danh sách cũ nếu có.
      */
     public void initializePlayers(List<String> names) {
         players.clear();
-        for (String name : names) {
-            players.add(new Player(name));
-        }
+        names.forEach(name -> {
+        	players.add(new Player(name));
+        });
     }
 
     public Dealer getDealer() {
@@ -38,40 +40,55 @@ public class Game {
     }
 
     /**
-     * Reset vòng chơi:
-     * - Trộn lại bộ bài nếu cần
-     * - Reset tay dealer và người chơi
-     * - Reset index người chơi hiện tại
+     * Reset vòng chơi:<br>
+     * - Trộn lại bộ bài nếu cần<br>
+     * - Reset tay dealer và người chơi<br>
+     * - Reset index người chơi hiện tại<br>
      */
     public void resetRound() {
-        boolean reshuffled = deck.reshuffle();
-        if (reshuffled) {
+        if (deck.reshuffle()) {
             System.out.println("Deck reshuffled due to red card.");
         }
         dealer.reset(deck);
-        for (Player player : players) {
-            player.reset(deck);
-        }
+        players.forEach(player -> {
+        	player.reset(deck);
+        });
         currentPlayerIndex = 0;
     }
 
     /**
-     * Chia bài đầu cho tất cả người chơi và dealer
+     * Chia bài đầu cho tất cả người chơi và dealer<br>
      * Mỗi người chơi nhận 2 lá, dealer nhận 2 lá.
      */
     public void dealInitialCards() {
-        for (Player player : players) {
-            player.addCard(deck.getCard());
-            player.addCard(deck.getCard());
-            System.out.println("Player " + player.getName() + " initial cards: " + player.getCurrentHand().getCards());
-        }
-        dealer.addCard(deck.getCard());
-        dealer.addCard(deck.getCard());
+    	for (Player player : players) {
+        	 Card c1 = deck.getCard();  // take top card
+        	 Card c2 = deck.getCard();  // take next card
+
+        	 // manually override to forced split cards
+        	 c1 = new Card(Rank.EIGHT, Suit.H);
+        	 c2 = new Card(Rank.EIGHT, Suit.D);
+
+        	 // deal these to the first player
+        	  player.addCard(c1);
+        	  player.addCard(c2);
+        	}
+
+            /*for (Player player : players) {
+                // override card example for testing split
+                player.addCard(deck.getCard());
+                player.addCard(deck.getCard());
+            }*/
+
+    	 Card c3 = new Card(Rank.EIGHT, Suit.H);
+    	 Card c4 = new Card(Rank.EIGHT, Suit.D);
+        dealer.addCard(c3);
+        dealer.addCard(c4);
         System.out.println("Dealer cards: " + dealer.getHand().getCards());
     }
 
     /**
-     * Người chơi đặt cược chính và cược phụ side bets
+     * Người chơi đặt cược chính và cược phụ side bets<br>
      * Nếu side bet > 0 và sideBetRules không rỗng thì đặt cược phụ
      */
     public void placeBets(Player player, float mainBet, float sideBet, Set<SideBetRule> sideBetRules) {
@@ -113,16 +130,19 @@ public class Game {
     }
 
     /**
-     * Chuyển sang người chơi kế tiếp.
-     * Trả về true nếu còn người chơi tiếp theo,
-     * false nếu đã hết lượt người chơi.
+     * Chuyển sang người chơi kế tiếp. <br>
+     * Trả về true nếu còn người chơi tiếp theo, <br>
+     * false nếu đã hết lượt người chơi. <br>
      */
     public boolean nextPlayer() {
-        if (currentPlayerIndex < players.size() - 1) {
-            currentPlayerIndex++;
-            return true;
-        }
-        return false;
+    	if (players.get(currentPlayerIndex).nextHand()) return true;
+    	else {
+    		if (currentPlayerIndex < players.size() - 1) {
+    			currentPlayerIndex++;
+                return true;
+    		}
+    	}
+    	return false;
     }
 
     /**

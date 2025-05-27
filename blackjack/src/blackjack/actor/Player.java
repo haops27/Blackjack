@@ -8,7 +8,7 @@ import java.util.List;
 public class Player implements Playable, Iterable<Hand> {
     private final List<Hand> hands;
     private int currentHandIndex = 0;
-    private static int MAX_HANDS = 4;
+    private static final int MAX_HANDS = 2;
     private float bet;
     private float sidebets;
     private float tokens = 2500f;
@@ -51,13 +51,15 @@ public class Player implements Playable, Iterable<Hand> {
     public void reset(Deck deck) {
         for (Hand hand : hands) {
             for (int i = 0; i < hand.numCards(); i++) {
-                deck.discard(hand.getCard(i));  // Discard one card at a time
+                deck.discard(hand.getCard(i));
             }
             hand.reset();
         }
         hands.clear();
         hands.add(new Hand());
         currentHandIndex = 0;
+        bet = 0;
+        sidebets = 0;
     }
 
     public boolean nextHand() {
@@ -75,8 +77,8 @@ public class Player implements Playable, Iterable<Hand> {
     public boolean canSplit() {
         Hand hand = getCurrentHand();
         return hands.size() < MAX_HANDS && hand.numCards() == 2 &&
-               hand.getCard(0).getRank() == hand.getCard(1).getRank() &&
-               tokens >= bet * (hands.size() + 1);
+                hand.getCard(0).equalValue(hand.getCard(1)) &&
+                tokens >= bet * (hands.size() + 1);
     }
 
     public boolean split(Deck deck) {
@@ -92,7 +94,6 @@ public class Player implements Playable, Iterable<Hand> {
         Hand splitHand = new Hand();
         splitHand.addCard(card1);
 
-        // Draw a card for each hand
         currentHand.addCard(deck.getCard());
         splitHand.addCard(deck.getCard());
 
@@ -119,7 +120,6 @@ public class Player implements Playable, Iterable<Hand> {
     }
 
     public float getAvailableTokens() {
-        // Tokens available after considering all hands' bets and side bets
         return tokens - hands.size() * bet - sidebets;
     }
 
@@ -171,6 +171,10 @@ public class Player implements Playable, Iterable<Hand> {
     @Override
     public Iterator<Hand> iterator() {
         return hands.iterator();
+    }
+
+    public List<Card> getHoleCards() {
+        return hands.get(0).getCards();
     }
 
     @Override

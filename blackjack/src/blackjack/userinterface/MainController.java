@@ -2,11 +2,13 @@ package blackjack.userinterface;
 
 import blackjack.deck.Card;
 import blackjack.actor.Dealer;
+import blackjack.actor.Hand;
 import blackjack.actor.Player;
 import blackjack.bet.BettingSystem.SideBetRule;
 import blackjack.logic.Game;
 
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -47,17 +49,22 @@ public class MainController {
 
     private final Game game = new Game();
     private boolean dealerRevealed = false;
+    
+    private final String TABLE_IMAGE_PATH = "/images/table.png";
+    private final String CHIP_IMAGE_PATH = "/images/chips.png";
+    private final String BACK_IMAGE_PATH = "/images/back.png";
+
 
     @FXML
     public void initialize() {
         // Load images
-        try (InputStream t = getClass().getResourceAsStream("/images/table.png")) {
+        try (InputStream t = getClass().getResourceAsStream(TABLE_IMAGE_PATH)) {
             tableImageView.setImage(new Image(t));
         } catch (Exception ex) {
             appendStatus("Cannot load table image.");
         }
 
-        try (InputStream c = getClass().getResourceAsStream("/images/chips.png")) {
+        try (InputStream c = getClass().getResourceAsStream(CHIP_IMAGE_PATH)) {
             chipImageView.setImage(new Image(c));
             chipImageView.setVisible(false);
         } catch (Exception ex) {
@@ -68,25 +75,38 @@ public class MainController {
         game.initializePlayers(List.of("Player1"));
         resetForNewRound();
     }
-
-    private void setActionButtonsDisabled(boolean disable) {
+    
+    /**
+     * Phương thức này vô hiệu hóa các nút bấm
+     */
+    private void setActionButtons(boolean disable) {
         hitButton.setDisable(disable);
         standButton.setDisable(disable);
         doubleButton.setDisable(disable);
         splitButton.setDisable(disable);
         insuranceButton.setDisable(disable);
     }
-
+    
+    /**
+     * Phương thức này khởi động các nút bấm dựa trên trạng thái của Player
+     */
+    private void setActionButtons() {
+    	hitButton.setDisable(game.getCurrentPlayer().getSum() >= 21);
+        standButton.setDisable(false);
+        doubleButton.setDisable(!game.getCurrentPlayer().canDouble());
+        splitButton.setDisable(!game.getCurrentPlayer().canSplit());
+        insuranceButton.setDisable(!game.dealerHasAce());
+    }
+    
+    /**
+     * Cập nhật giao diện cho player/dealer
+     */
     private void updateUI() {
         Player p = game.getCurrentPlayer();
         Dealer d = game.getDealer();
 
         // Dealer cards display
-        if (!dealerRevealed) {
-            showDealerInitialCards();
-        } else {
-            showDealerAllCards();
-        }
+        showDealerCards();
 
         // Show sums and tokens
         dealerSumLabel.setText("Dealer Sum: " + (dealerRevealed ? d.getSum() : "?"));
@@ -98,29 +118,59 @@ public class MainController {
         sideBetLabel.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
 
         // Show player's cards
-        showCards(playerCardsHBox, p.getCurrentHand().getCards());
+        playerCardsHBox.getChildren().clear();
+
+        List<Hand> hands = p.getHands();
+        for (int i = 0; i < hands.size(); i++) {
+            HBox handBox = new HBox(10);
+            handBox.setAlignment(Pos.CENTER);
+            // draw each card in this hand
+            for (Card c : hands.get(i).getCards()) {
+                addCardToHBox(handBox, c.getImagePath());
+            }
+            // highlight the active hand
+            if (i == p.getCurrentHandIndex()) {
+                handBox.setStyle(
+                   "-fx-border-color: gold; -fx-border-width: 3; -fx-padding: 5;"
+                );
+            }
+            playerCardsHBox.getChildren().add(handBox);
+        }
 
         // Update status message (only append when new action)
         appendStatus("Playing hand " + (p.getCurrentHandIndex() + 1) + " of " + p.getHands().size());
+        setActionButtons();
     }
-
-    private void showDealerInitialCards() {
-        dealerCardsHBox.getChildren().clear();
-        List<Card> cards = game.getDealer().getHand().getCards();
-        if (cards.size() >= 1) addCardToHBox(dealerCardsHBox, cards.get(0).getImagePath());
-        addCardToHBox(dealerCardsHBox, "/images/back.png"); // Face down card
+    /**
+     * Hiện lá bài của Dealer
+     */
+    private void showDealerCards() {
+        if (dealerRevealed) {
+        	dealerCardsHBox.getChildren().clear();
+            showCards(dealerCardsHBox, game.getDealer().getHand().getCards());
+        } else {
+        	dealerCardsHBox.getChildren().clear();
+            if (game.getDealer().getNumCards() >= 1) {
+            	addCardToHBox(dealerCardsHBox, game.getDealer().showFirstCard().getImagePath());
+            }
+            addCardToHBox(dealerCardsHBox, BACK_IMAGE_PATH); // Face down card
+        }
+    	
     }
-
-    private void showDealerAllCards() {
-        dealerCardsHBox.getChildren().clear();
-        showCards(dealerCardsHBox, game.getDealer().getHand().getCards());
-    }
-
+    
+    /**
+     * Thêm toàn bộ lá bài của 1 người chơi vào HBox của người chơi đó
+     */
     private void showCards(HBox box, List<Card> cards) {
         box.getChildren().clear();
         for (Card c : cards) addCardToHBox(box, c.getImagePath());
     }
-
+    
+    /**
+     * Thêm lá bài vào mục hiện lá bài của player/dealer<br>
+     * - box: HBox chứa lá bài của player/dealer<br>
+     * - resource: đường dẫn đến ánh lá bài<br>
+     */
     private void addCardToHBox(HBox box, String resource) {
         try (InputStream in = getClass().getResourceAsStream(resource)) {
             ImageView iv = new ImageView(new Image(in));
@@ -136,7 +186,17 @@ public class MainController {
     private void onPlaceBet() {
         try {
             float main = Float.parseFloat(mainBetField.getText());
-            float side = sideBetField.getText().isBlank() ? 0f : Float.parseFloat(sideBetField.getText());
+            float side = sideBetField.getText().isBlank() 
+                         ? 0f 
+                         : Float.parseFloat(sideBetField.getText());
+
+            // ❗ Reject an “orphan” side-bet before doing anything else
+            if (side > 0 
+                && !perfectPairCheckBox.isSelected() 
+                && !twentyOnePlusThreeCheckBox.isSelected()) {
+                appendStatus("You must select a side‐bet rule before placing a side‐bet!");
+                return;
+            }
 
             Player p = game.getCurrentPlayer();
             if (p.getAvailableTokens() < main + side) {
@@ -144,9 +204,14 @@ public class MainController {
                 return;
             }
 
+            // Only now collect the rules
             Set<SideBetRule> rules = new HashSet<>();
-            if (perfectPairCheckBox.isSelected()) rules.add(SideBetRule.PERFECT_PAIR);
-            if (twentyOnePlusThreeCheckBox.isSelected()) rules.add(SideBetRule.TWENTYONE_PLUS_THREE);
+            if (side > 0) {
+                if (perfectPairCheckBox.isSelected()) 
+                    rules.add(SideBetRule.PERFECT_PAIR);
+                if (twentyOnePlusThreeCheckBox.isSelected()) 
+                    rules.add(SideBetRule.TWENTYONE_PLUS_THREE);
+            }
 
             game.resetRound();
             dealerRevealed = false;
@@ -156,23 +221,24 @@ public class MainController {
             appendStatus(String.format("Bet placed: Main %.1f, Side %.1f", main, side));
 
             game.dealInitialCards();
-
             updateUI();
 
-            setActionButtonsDisabled(false);
+            // disable betting controls
             placeBetButton.setDisable(true);
             mainBetField.setDisable(true);
             sideBetField.setDisable(true);
             perfectPairCheckBox.setDisable(true);
             twentyOnePlusThreeCheckBox.setDisable(true);
 
-            // Enable insurance button only if dealer shows Ace
-            insuranceButton.setDisable(!game.dealerHasAce());
+            if (game.getCurrentPlayer().isBlackjack()) {
+                endPlayerTurn();
+            }
 
         } catch (NumberFormatException ex) {
             appendStatus("Invalid bet input.");
         }
     }
+
 
     @FXML
     private void onHit() {
@@ -180,11 +246,14 @@ public class MainController {
         p.addCard(game.getDeck().getCard());
         appendStatus("Player hits.");
         updateUI();
-
-        if (p.isBust()) {
-            appendStatus("Player busted!");
-            endPlayerTurn();
+        
+        if (p.getSum() >= 21) {
+        	if (p.isBust()) appendStatus("Player busted!");
+        	endPlayerTurn();
+        	return;
         }
+        
+        setActionButtons();
     }
 
     @FXML
@@ -201,9 +270,11 @@ public class MainController {
             appendStatus("Player doubles down.");
             updateUI();
             endPlayerTurn();
+            return;
         } else {
             appendStatus("Cannot double down.");
         }
+        setActionButtons();
     }
 
     @FXML
@@ -213,9 +284,14 @@ public class MainController {
             p.split(game.getDeck());
             appendStatus("Player splits hand.");
             updateUI();
+            if (game.getCurrentPlayer().isBlackjack()) {
+            	endPlayerTurn();
+            }
+            return;
         } else {
             appendStatus("Cannot split.");
         }
+        
     }
 
     @FXML
@@ -230,14 +306,18 @@ public class MainController {
         p.setTokens(-insuranceCost);
         appendStatus(String.format("Insurance cost $%.2f deducted.", insuranceCost));
     }
-
+    
+    /**
+     * Kiểm tra xem player đã hết lượt chơi chưa<br>
+     * Nếu chưa, chuyển sang Hand tiếp theo của Player hoặc Player tiếp theo
+     */
     private void endPlayerTurn() {
         if (game.nextPlayer()) {
-            appendStatus("Next player's turn.");
+            appendStatus("Next turn.");
             updateUI();
         } else {
             // Dealer turn
-            dealerRevealed = true;
+        	dealerRevealed = true;
             appendStatus("Dealer's turn.");
             updateUI();
 
@@ -254,12 +334,12 @@ public class MainController {
 
             // Show result messages for all players
             for (Player player : game.getPlayers()) {
-                float tokens = player.getTokens();
-                String result = tokens > 2500 ? "won!" : tokens < 2500 ? "lost!" : "broke even.";
-                appendStatus(player.getName() + " " + result);
+                for (Hand hand : player) {
+                	appendStatus(player.getName() + " " + hand.getStatus());
+                }
             }
 
-            setActionButtonsDisabled(true);
+            setActionButtons(true);
             newRoundButton.setDisable(false);
         }
     }
@@ -268,7 +348,10 @@ public class MainController {
     private void onNewRound() {
         resetForNewRound();
     }
-
+    
+    /**
+     * Đặt lại card, bets để sang ván mới
+     */
     private void resetForNewRound() {
         dealerCardsHBox.getChildren().clear();
         playerCardsHBox.getChildren().clear();
@@ -290,20 +373,20 @@ public class MainController {
 
         chipImageView.setVisible(false);
 
-        setActionButtonsDisabled(true);
+        setActionButtons(true);
         newRoundButton.setDisable(true);
 
-        insuranceButton.setDisable(true);
+        //insuranceButton.setDisable(true);
 
         statusLabel.setText("New round — place your bets.");
     }
 
     private void appendStatus(String line) {
-        String currentText = statusLabel.getText();
-        if (!currentText.isEmpty()) {
+    	String currentText = statusLabel.getText();
+        if (currentText.length() <= 100) {
             statusLabel.setText(currentText + "\n" + line);
         } else {
-            statusLabel.setText(line);
+        	statusLabel.setText(line);
         }
     }
 }

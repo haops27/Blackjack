@@ -48,16 +48,20 @@ public class BettingSystem {
                 if (hand.isBlackjack()) {
                     payout = player.getBet() * 1.5f;
                     System.out.println("PLAYER " + player.getName() + " HAS BLACKJACK");
+                    hand.setStatus(Hand.Status.BLACKJACK);
                 } else {
                     payout = player.getBet();
+                    hand.setStatus(Hand.Status.WON);
                 }
                 System.out.println("Player " + player.getName() + " won $" + payout);
             } else if (push) {
                 payout = 0;
                 System.out.println("Player " + player.getName() + " pushes (tie)");
+                hand.setStatus(Hand.Status.PUSH);
             } else {
                 payout = -player.getBet();
                 System.out.println("Player " + player.getName() + " lost $" + (-payout));
+                hand.setStatus(Hand.Status.LOST);
             }
             player.setTokens(payout);
         }

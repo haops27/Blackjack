@@ -1,95 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.geometry.Pos?>
-<?import javafx.scene.control.*?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
 
-<StackPane xmlns="http://javafx.com/javafx/24"
-           xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="blackjack.userinterface.MainController">
-
-  <!-- green table background -->
-  <ImageView fx:id="tableImageView" fitWidth="900" preserveRatio="true"/>
-
-  <AnchorPane prefWidth="900" prefHeight="600">
-
-    <!-- dealer’s cards -->
-    <HBox fx:id="dealerCardsHBox"
-          layoutX="150" layoutY="80"
-          prefWidth="600" prefHeight="120"
-          spacing="10" alignment="CENTER"/>
-
-    <!-- dealer sum (just above the dealer cards) -->
-    <Label fx:id="dealerSumLabel"
-           layoutX="350" layoutY="60"
-           style="-fx-font-size:18px; -fx-text-fill:red;"
-           text="Dealer Sum: 0"/>
-
-    <!-- player’s cards -->
-    <HBox fx:id="playerCardsHBox"
-          layoutX="150" layoutY="360"
-          prefWidth="600" prefHeight="120"
-          spacing="10" alignment="CENTER"/>
-
-    <!-- player sum (just above the player cards) -->
-    <Label fx:id="playerSumLabel"
-           layoutX="350" layoutY="340"
-           style="-fx-font-size:18px; -fx-text-fill:red;"
-           text="Player Sum: 0"/>
-
-    <!-- chip image, hidden until after bet -->
-    <ImageView fx:id="chipImageView"
-               layoutX="420" layoutY="480"
-               fitWidth="50" fitHeight="50"
-               visible="false"/>
-
-    <!-- tokens label -->
-    <Label fx:id="tokensLabel"
-           layoutX="740" layoutY="480"
-           style="-fx-font-size:16px; -fx-text-fill:red;"
-           text="Tokens: 2500"/>
-
-    <!-- side bet label -->
-    <Label fx:id="sideBetLabel"
-           layoutX="740" layoutY="510"
-           style="-fx-font-size:16px; -fx-text-fill:red;"
-           text="Side Bet: 0.00"/>
-
-    <!-- status messages over the table (transparent background) -->
-    <Label fx:id="statusLabel"
-           layoutX="150" layoutY="230"
-           prefWidth="600" prefHeight="100"
-           wrapText="true"
-           style="-fx-background-color:transparent;
-                  -fx-font-size:14px;
-                  -fx-text-fill:gold;"/>
-
-    <!-- bet inputs + side-bet checkboxes -->
-    <HBox layoutX="150" layoutY="540"
-          prefWidth="600" spacing="10" alignment="CENTER">
-      <Label text="Main Bet:" style="-fx-text-fill:red;"/>
-      <TextField fx:id="mainBetField" prefWidth="100"/>
-      <Label text="Side Bet:" style="-fx-text-fill:red;"/>
-      <TextField fx:id="sideBetField" prefWidth="100"/>
-      <CheckBox fx:id="perfectPairCheckBox" text="Perfect Pair" style="-fx-text-fill:red;"/>
-      <CheckBox fx:id="twentyOnePlusThreeCheckBox" text="21+3" style="-fx-text-fill:red;"/>
-      <Button fx:id="insuranceButton"
-              text="Take Insurance"
-              disable="true"
-              onAction="#onInsurance"
-              style="-fx-font-size:12px; -fx-text-fill:orange;"/>
-    </HBox>
-
-    <!-- action buttons -->
-    <HBox layoutX="150" layoutY="580"
-          prefWidth="600" spacing="10" alignment="CENTER">
-      <Button fx:id="placeBetButton" text="Place Bet" onAction="#onPlaceBet"/>
-      <Button fx:id="hitButton"       text="Hit"       disable="true" onAction="#onHit"/>
-      <Button fx:id="standButton"     text="Stand"     disable="true" onAction="#onStand"/>
-      <Button fx:id="doubleButton"    text="Double"    disable="true" onAction="#onDouble"/>
-      <Button fx:id="splitButton"     text="Split"     disable="true" onAction="#onSplit"/>
-      <Button fx:id="newRoundButton"  text="New Round" disable="true" onAction="#onNewRound"/>
-    </HBox>
-
-  </AnchorPane>
+<StackPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="blackjack.userinterface.MainController">
+   <children>
+   
+     <!-- green table background -->
+     <ImageView fx:id="tableImageView" fitWidth="900" preserveRatio="true" />
+   
+     <AnchorPane prefHeight="600" prefWidth="900">
+      <children>
+      
+          <!-- dealer’s cards -->
+          <HBox fx:id="dealerCardsHBox" alignment="CENTER" layoutX="150" layoutY="80" prefHeight="120" prefWidth="600" spacing="10" />
+      
+          <!-- dealer sum (just above the dealer cards) -->
+          <Label fx:id="dealerSumLabel" layoutX="395.0" layoutY="14.0" style="-fx-font-size:18px; -fx-text-fill:red;" text="Dealer Sum: 0" />
+      
+          <!-- player’s cards -->
+          <HBox fx:id="playerCardsHBox" alignment="CENTER" layoutX="150" layoutY="360" prefHeight="120" prefWidth="600" spacing="10" />
+      
+          <!-- chip image, hidden until after bet -->
+          <ImageView fx:id="chipImageView" fitHeight="50" fitWidth="50" layoutX="420" layoutY="480" visible="false" />
+      
+          <!-- tokens label -->
+          <Label fx:id="tokensLabel" layoutX="787.0" layoutY="493.0" style="-fx-font-size:16px; -fx-text-fill:red;" text="Tokens: 2500" textFill="#edff66">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font></Label>
+      
+          <!-- side bet label -->
+          <Label fx:id="sideBetLabel" layoutX="786.0" layoutY="523.0" style="-fx-font-size:16px; -fx-text-fill:red;" text="Side Bet: 0.00" />
+      
+          <!-- status messages over the table (transparent background) -->
+          <Label fx:id="statusLabel" layoutX="150" layoutY="230" prefHeight="100" prefWidth="600" style="-fx-background-color:transparent;                   -fx-font-size:14px;                   -fx-text-fill:gold;" wrapText="true" />
+      
+          <!-- bet inputs + side-bet checkboxes -->
+          <HBox alignment="CENTER" layoutX="150.0" layoutY="520.0" prefWidth="600" spacing="10">
+         <children>
+               <Label style="-fx-text-fill:red;" text="Main Bet:" />
+               <TextField fx:id="mainBetField" prefWidth="100" />
+               <Label style="-fx-text-fill:red;" text="Side Bet:" />
+               <TextField fx:id="sideBetField" prefWidth="100" />
+               <CheckBox fx:id="perfectPairCheckBox" style="-fx-text-fill:red;" text="Perfect Pair" />
+               <CheckBox fx:id="twentyOnePlusThreeCheckBox" style="-fx-text-fill:red;" text="21+3" />
+               <Button fx:id="insuranceButton" disable="true" onAction="#onInsurance" style="-fx-font-size:12px; -fx-text-fill:orange;" text="Take Insurance" />
+         </children>
+          </HBox>
+      
+          <!-- action buttons -->
+          <HBox alignment="CENTER" layoutX="150.0" layoutY="560.0" prefHeight="31.0" prefWidth="600" spacing="10">
+         <children>
+               <Button fx:id="placeBetButton" onAction="#onPlaceBet" text="Place Bet" />
+               <Button fx:id="hitButton" disable="true" onAction="#onHit" text="Hit" />
+               <Button fx:id="standButton" disable="true" onAction="#onStand" text="Stand" />
+               <Button fx:id="doubleButton" disable="true" onAction="#onDouble" text="Double" />
+               <Button fx:id="splitButton" disable="true" onAction="#onSplit" text="Split" />
+               <Button fx:id="newRoundButton" disable="true" onAction="#onNewRound" text="New Round" />
+         </children>
+          </HBox>
+            <ImageView fitHeight="161.0" fitWidth="479.0" layoutX="211.0" layoutY="169.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/banner.png" />
+               </image>
+            </ImageView>
+      
+                <!-- player sum (just above the player cards) -->
+          <Label fx:id="playerSumLabel" layoutX="391.0" layoutY="333.0" style="-fx-font-size:18px; -fx-text-fill:red;" text="Player Sum: 0" />
+      </children>
+   
+     </AnchorPane>
+   </children>
 </StackPane>

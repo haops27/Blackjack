@@ -50,6 +50,10 @@ public class Dealer implements Playable {
     public Card showFirstCard() {
         return hand.getCard(0);
     }
+    
+    public int getNumCards() {
+    	return hand.numCards();
+    }
 
     @Override
     public String toString() {

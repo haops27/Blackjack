@@ -57,10 +57,24 @@ public class Hand {
         cards.clear();
         sum = 0;
         aceCount = 0;
+        status = null;
     }
 
     @Override
     public String toString() {
         return cards + " (sum: " + sum + ")";
     }
+    
+    public enum Status {
+    	LOST, PUSH, WON, BLACKJACK;
+    }
+    private Status status;
+
+	public Status getStatus() {
+		return status;
+	}
+
+	public void setStatus(Status status) {
+		this.status = status;
+	}
 }

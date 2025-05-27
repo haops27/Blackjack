@@ -9,13 +9,17 @@ import javafx.stage.Stage;
 public class MainApp extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainView.fxml"));
+        // Màn hình chọn game (ví dụ MainMenu.fxml)
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainMenu.fxml"));
         Parent root = loader.load();
 
         Scene scene = new Scene(root);
-        primaryStage.setTitle("Blackjack Game");
+        primaryStage.setTitle("Game Selector");
         primaryStage.setScene(scene);
-        primaryStage.setResizable(false);
         primaryStage.show();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
     }
 }
