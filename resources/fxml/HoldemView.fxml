@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="rootPane" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="texas.userinterface.HoldemController">
+   <ImageView fx:id="backgroundImageView" pickOnBounds="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <image>
+         <Image url="@../images/background.jpg" />
+      </image>
+   </ImageView>
+
+    <!-- Community cards -->
+    <HBox fx:id="communityCardsHBox" alignment="CENTER" layoutX="395.0" layoutY="315.0" prefHeight="120" spacing="10" />
+
+    <!-- Player cards -->
+    <HBox fx:id="playerCardsHBox" alignment="CENTER" layoutX="480.0" layoutY="464.0" prefHeight="120" spacing="10" />
+
+    <!-- Player name and tokens + chip -->
+    <HBox alignment="CENTER_LEFT" layoutX="305.0" layoutY="657.0" spacing="10" AnchorPane.bottomAnchor="115.79999999999995">
+        <Label fx:id="playerNameLabel" style="-fx-font-size:18px; -fx-text-fill:red;" />
+        <ImageView fx:id="chipImageView" fitHeight="24" fitWidth="24" visible="false" />
+        <Label fx:id="tokensLabel" style="-fx-font-size:18px; -fx-text-fill:red;" />
+    </HBox>
+
+    <Label fx:id="potLabel" alignment="CENTER" layoutX="593.0" layoutY="658.0" prefHeight="27.0" style="-fx-font-size:18px; -fx-text-fill:red;" AnchorPane.bottomAnchor="114.8" />
+    <Label fx:id="currentBetLabel" layoutX="737.0" layoutY="658.0" prefHeight="27.0" style="-fx-font-size:18px; -fx-text-fill:red;" AnchorPane.bottomAnchor="114.8" />
+
+    <!-- Status -->
+    <TextArea fx:id="statusLabel" editable="false" layoutX="300.0" layoutY="697.0" prefHeight="50" prefWidth="600" style="-fx-font-size: 16px; -fx-text-fill: black;" wrapText="true" AnchorPane.bottomAnchor="52.6">
+      <font>
+         <Font name="Consolas" size="12.0" />
+      </font></TextArea>
+
+    <!-- Action buttons -->
+    <HBox alignment="CENTER" layoutX="387.0" layoutY="760.0" spacing="10" AnchorPane.bottomAnchor="14.399999999999999">
+        <Button fx:id="checkCallButton" onAction="#onCheckCall" text="Check/Call" />
+        <Button fx:id="raiseButton" onAction="#onRaise" text="Raise" />
+        <Button fx:id="foldButton" onAction="#onFold" text="Fold" />
+        <TextField fx:id="raiseAmountField" prefWidth="100" promptText="Amount" />
+        <Button fx:id="nextStageButton" onAction="#onNextStage" text="Next Stage" />
+        <Button fx:id="resetButton" disable="true" onAction="#onReset" text="Reset" visible="false" />
+    </HBox>
+   <ImageView fitHeight="57.0" fitWidth="39.0" layoutX="424.0" layoutY="224.0" pickOnBounds="true" preserveRatio="true">
+      <image>
+         <Image url="@../images/back.png" />
+      </image>
+   </ImageView>
+   <ImageView fitHeight="57.0" fitWidth="39.0" layoutX="469.0" layoutY="224.0" pickOnBounds="true" preserveRatio="true">
+      <image>
+         <Image url="@../images/back.png" />
+      </image>
+   </ImageView>
+   <ImageView fitHeight="67.0" fitWidth="39.0" layoutX="705.0" layoutY="224.0" pickOnBounds="true" preserveRatio="true">
+      <image>
+         <Image url="@../images/back.png" />
+      </image>
+   </ImageView>
+   <ImageView fitHeight="60.0" fitWidth="39.0" layoutX="757.0" layoutY="224.0" pickOnBounds="true" preserveRatio="true">
+      <image>
+         <Image url="@../images/back.png" />
+      </image>
+   </ImageView>
+   <ImageView fitHeight="57.0" fitWidth="39.0" layoutX="280.0" layoutY="372.0" pickOnBounds="true" preserveRatio="true" rotate="-90.0">
+      <image>
+         <Image url="@../images/back.png" />
+      </image>
+   </ImageView>
+   <ImageView fitHeight="57.0" fitWidth="39.0" layoutX="280.0" layoutY="327.0" pickOnBounds="true" preserveRatio="true" rotate="-90.0">
+      <image>
+         <Image url="@../images/back.png" />
+      </image>
+   </ImageView>
+   <ImageView fitHeight="57.0" fitWidth="39.0" layoutX="881.0" layoutY="372.0" pickOnBounds="true" preserveRatio="true" rotate="90.0">
+      <image>
+         <Image url="@../images/back.png" />
+      </image>
+   </ImageView>
+   <ImageView fitHeight="57.0" fitWidth="39.0" layoutX="881.0" layoutY="327.0" pickOnBounds="true" preserveRatio="true" rotate="90.0">
+      <image>
+         <Image url="@../images/back.png" />
+      </image>
+   </ImageView>
+
+</AnchorPane>
