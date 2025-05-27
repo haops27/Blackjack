@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<StackPane prefHeight="633.0" prefWidth="1273.0" stylesheets="@table.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="blackjack.userinterface.MainController">
+
+  <children>
+    <!-- green table background -->
+    <ImageView fx:id="tableImageView" fitHeight="731.0" fitWidth="1273.0">
+      <image>
+        <Image url="@../images/table.png" />
+      </image>
+    </ImageView>
+
+    <AnchorPane prefHeight="882.0" prefWidth="1273.0">
+      <children>
+
+        <!-- discard pile: upper-left -->
+        <Pane fx:id="discardPilePane" layoutX="50" layoutY="50" prefHeight="100" prefWidth="150" style="-fx-border-color: white; -fx-border-style: dashed;" />
+
+        <!-- deck pile: upper-right -->
+        <Pane fx:id="deckPilePane" layoutX="1073" layoutY="50" prefHeight="100" prefWidth="150" style="-fx-border-color: white; -fx-border-style: dashed;" />
+
+        <!-- dealer’s cards (centered) -->
+        <StackPane layoutY="68.0" prefHeight="120" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="68.0">
+          <children>
+            <Pane fx:id="dealerCards" maxWidth="-Infinity" prefHeight="120" prefWidth="350.0" />
+          </children>
+        </StackPane>
+
+        <!-- dealer’s sum bubble -->
+        <Label fx:id="dealerSumLabel" alignment="CENTER" layoutX="586.0" layoutY="14.0" prefHeight="30.0" prefWidth="30.0" styleClass="sum-bubble" text="?" />
+
+        <!-- all‐players HBox -->
+        <HBox fx:id="playersContainer" alignment="TOP_CENTER" layoutX="50.0" layoutY="360.0" prefHeight="200.0" prefWidth="1173.0" spacing="50" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" />
+
+        <!-- chip image (hidden until after bet) -->
+        <ImageView fx:id="chipImageView" fitHeight="50" fitWidth="50" layoutX="420" layoutY="480" visible="false">
+          <image>
+            <Image url="@../images/chip100.png" />
+          </image>
+        </ImageView>
+
+        <!-- tokens & side‐bet labels -->
+        <Label fx:id="tokensLabel" layoutX="1118.0" layoutY="636.0" style="-fx-font-size:16px; -fx-text-fill:red;" text="Tokens: 0.00" />
+        <Label fx:id="sideBetLabel" layoutX="1116.0" layoutY="689.0" prefHeight="31.0" prefWidth="98.0" style="-fx-font-size:16px; -fx-text-fill:red;" text="Side Bet: 0.00" />
+
+        <!-- status messages -->
+        <Label fx:id="statusLabel" layoutX="150.0" layoutY="230.0" prefHeight="100.0" prefWidth="600.0" style="-fx-background-color:transparent; -fx-font-size:14px; -fx-text-fill:gold;" wrapText="true" />
+
+        <!-- bet inputs + side‐bet checkboxes -->
+        <HBox alignment="CENTER" layoutX="344.0" layoutY="633.0" prefWidth="600.0" spacing="10">
+          <children>
+            <Label style="-fx-text-fill:red;" text="Main Bet:" />
+            <TextField fx:id="mainBetField" prefWidth="100" />
+            <Label style="-fx-text-fill:red;" text="Side Bet:" />
+            <TextField fx:id="sideBetField" prefWidth="100" />
+            <CheckBox fx:id="perfectPairCheckBox" style="-fx-text-fill:red;" text="Perfect Pair" />
+            <CheckBox fx:id="twentyOnePlusThreeCheckBox" style="-fx-text-fill:red;" text="21+3" />
+            <Button fx:id="insuranceButton" onAction="#onInsurance" style="-fx-font-size:12px; -fx-text-fill:orange;" text="Take Insurance" />
+          </children>
+        </HBox>
+
+        <!-- shared action buttons -->
+        <HBox alignment="CENTER" layoutX="334.0" layoutY="689.0" prefHeight="31.0" prefWidth="600.0" spacing="10">
+          <children>
+            <Button fx:id="placeBetButton" onAction="#onPlaceBet" text="Place Bet" />
+            <Button fx:id="hitButton" onAction="#onHit" text="Hit" />
+            <Button fx:id="standButton" onAction="#onStand" text="Stand" />
+            <Button fx:id="doubleButton" onAction="#onDouble" text="Double" />
+            <Button fx:id="splitButton" onAction="#onSplit" text="Split" />
+            <Button fx:id="newRoundButton" onAction="#onNewRound" text="New Round" />
+          </children>
+        </HBox>
+
+        <!-- decorative banner -->
+        <ImageView fitHeight="161.0" fitWidth="479.0" layoutX="410.0" layoutY="188.0" pickOnBounds="true" preserveRatio="true">
+          <image>
+            <Image url="@../images/banner.png" />
+          </image>
+        </ImageView>
+
+      </children>
+    </AnchorPane>
+  </children>
+</StackPane>
